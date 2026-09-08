@@ -1,5 +1,5 @@
 package Veterinaria.gui;
-
+//god class
 import Veterinaria.Ave;
 import Veterinaria.Dueño;
 import Veterinaria.Exoticos;

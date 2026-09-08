@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Long Parameter List actualizado 
+ */
 public abstract class Mascota implements Comparable<Mascota> {
     private String id;
     private String nombre;
@@ -28,6 +31,20 @@ public abstract class Mascota implements Comparable<Mascota> {
         setNombre(nombre);
         if (tratamiento != null) {
             agregarTratamiento(tratamiento);
+        }
+    }
+
+    /**
+     * Constructor que acepta un MascotaBuilder (soluciona Long Parameter List)
+     */
+    protected Mascota(MascotaBuilder builder) {
+        this.id = validarTexto(builder.getId(), "id");
+        this.tratamientos = new ArrayList<>();
+        setPeso(builder.getPeso());
+        setEdad(builder.getEdad());
+        setNombre(builder.getNombre());
+        if (builder.getTratamiento() != null) {
+            agregarTratamiento(builder.getTratamiento());
         }
     }
 
@@ -98,11 +115,9 @@ public abstract class Mascota implements Comparable<Mascota> {
         return edad < 10 && peso < 30;
     }
 
-    public Boolean esAptaParaProcedimientoEspecial(Mascota mascota) {
-        if (mascota == null) {
-            return false;
-        }
-        return mascota.esAptaParaProcedimientoEspecial();
+    @Override
+    public int compareTo(Mascota o) {
+        return Double.compare(this.costoBaseAtencion(), o.costoBaseAtencion());
     }
 
     protected String validarTexto(String valor, String campo) {

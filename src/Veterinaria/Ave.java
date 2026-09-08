@@ -34,18 +34,4 @@ private  Tipo tipo;
         Double costoBase = 300.0 + getEdad()*20;
         return  costoBase;
     }
-
-    @Override
-    public Boolean esAptaParaProcedimientoEspecial(Mascota mascota) {
-        if(mascota.getEdad()<10 && mascota.getPeso()<30){
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public int compareTo(Mascota o) {
-        return Double.compare(this.costoBaseAtencion(), o.costoBaseAtencion());
-    }
 }

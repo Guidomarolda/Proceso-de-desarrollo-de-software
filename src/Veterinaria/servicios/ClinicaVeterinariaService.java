@@ -1,15 +1,12 @@
 package Veterinaria.servicios;
 
-import Veterinaria.Ave;
 import Veterinaria.Cirujia;
 import Veterinaria.Dueño;
 import Veterinaria.Estado;
-import Veterinaria.Exoticos;
-import Veterinaria.Gato;
 import Veterinaria.Mascota;
+import Veterinaria.MascotaFactory;
 import Veterinaria.NivelComplejidad;
 import Veterinaria.NivelCuidado;
-import Veterinaria.Perro;
 import Veterinaria.Tipo;
 import Veterinaria.Tratamiento;
 import Veterinaria.TratamientoCurativo;
@@ -22,7 +19,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
+//god class
 public class ClinicaVeterinariaService {
     private final ArchivoClinicaRepository repository;
     private final List<Dueño> duenos;
@@ -49,25 +46,25 @@ public class ClinicaVeterinariaService {
     }
 
     public Mascota registrarPerro(String duenoId, String nombre, int edad, Double peso, String raza) {
-        Mascota mascota = new Perro((Tratamiento) null, peso, edad, nombre, raza);
+        Mascota mascota = MascotaFactory.crearPerro(nombre, edad, peso, null, raza);
         agregarMascotaADueno(duenoId, mascota);
         return mascota;
     }
 
     public Mascota registrarGato(String duenoId, String nombre, int edad, Double peso, Boolean vacunado) {
-        Mascota mascota = new Gato((Tratamiento) null, peso, edad, nombre, vacunado);
+        Mascota mascota = MascotaFactory.crearGato(nombre, edad, peso, null, vacunado);
         agregarMascotaADueno(duenoId, mascota);
         return mascota;
     }
 
     public Mascota registrarAve(String duenoId, String nombre, int edad, Double peso, Tipo tipo) {
-        Mascota mascota = new Ave((Tratamiento) null, peso, edad, nombre, tipo);
+        Mascota mascota = MascotaFactory.crearAve(nombre, edad, peso, null, tipo);
         agregarMascotaADueno(duenoId, mascota);
         return mascota;
     }
 
     public Mascota registrarExotico(String duenoId, String nombre, int edad, Double peso, NivelCuidado nivelCuidado) {
-        Mascota mascota = new Exoticos((Tratamiento) null, peso, edad, nombre, nivelCuidado);
+        Mascota mascota = MascotaFactory.crearExotico(nombre, edad, peso, null, nivelCuidado);
         agregarMascotaADueno(duenoId, mascota);
         return mascota;
     }

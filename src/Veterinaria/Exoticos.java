@@ -34,16 +34,4 @@ public class Exoticos extends  Mascota {
         Double costoBase = 800.0 + getEdad()*100.0;
         return  costoBase;
     }
-    @Override
-    public int compareTo(Mascota o) {
-        return Double.compare(this.costoBaseAtencion(), o.costoBaseAtencion());
-    }
-    @Override
-    public Boolean esAptaParaProcedimientoEspecial(Mascota mascota) {
-        if(mascota.getEdad()<10 && mascota.getPeso()<30){
-            return true;
-        } else {
-            return false;
-        }
-    }
 }

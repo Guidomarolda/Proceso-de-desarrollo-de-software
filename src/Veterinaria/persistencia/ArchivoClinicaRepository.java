@@ -1,5 +1,5 @@
 package Veterinaria.persistencia;
-
+//god class
 import Veterinaria.Ave;
 import Veterinaria.Cirujia;
 import Veterinaria.Dueño;
