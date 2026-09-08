@@ -1,5 +1,8 @@
 package Veterinaria.gui;
-//god class
+
+/**
+ * Panel de presentacion para registro, visualizacion y comparacion de mascotas.
+ */
 import Veterinaria.Ave;
 import Veterinaria.Dueño;
 import Veterinaria.Exoticos;
@@ -26,7 +29,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import Veterinaria.controladores.MascotaController;
+
 public class MascotasPanel extends JPanel implements RefreshablePanel {
+    private final MascotaController mascotaController;
     private final ClinicaVeterinariaService service;
     private final Runnable onChange;
     private final DefaultComboBoxModel<Dueño> duenosModel;
@@ -48,6 +54,11 @@ public class MascotasPanel extends JPanel implements RefreshablePanel {
     private final JComboBox<Mascota> compararSegunda;
 
     public MascotasPanel(ClinicaVeterinariaService service, Runnable onChange) {
+        this(service.getMascotaController(), service, onChange);
+    }
+
+    public MascotasPanel(MascotaController mascotaController, ClinicaVeterinariaService service, Runnable onChange) {
+        this.mascotaController = mascotaController;
         this.service = service;
         this.onChange = onChange;
         this.duenosModel = new DefaultComboBoxModel<>();
@@ -172,13 +183,13 @@ public class MascotasPanel extends JPanel implements RefreshablePanel {
             int edad = Integer.parseInt(edadField.getText());
             Double peso = Double.parseDouble(pesoField.getText());
             if ("Perro".equals(tipo)) {
-                service.registrarPerro(dueno.getId(), nombreField.getText(), edad, peso, razaField.getText());
+                mascotaController.registrarPerro(dueno.getId(), nombreField.getText(), edad, peso, razaField.getText());
             } else if ("Gato".equals(tipo)) {
-                service.registrarGato(dueno.getId(), nombreField.getText(), edad, peso, Boolean.parseBoolean((String) vacunadoCombo.getSelectedItem()));
+                mascotaController.registrarGato(dueno.getId(), nombreField.getText(), edad, peso, Boolean.parseBoolean((String) vacunadoCombo.getSelectedItem()));
             } else if ("Ave".equals(tipo)) {
-                service.registrarAve(dueno.getId(), nombreField.getText(), edad, peso, (Tipo) tipoAveCombo.getSelectedItem());
+                mascotaController.registrarAve(dueno.getId(), nombreField.getText(), edad, peso, (Tipo) tipoAveCombo.getSelectedItem());
             } else {
-                service.registrarExotico(dueno.getId(), nombreField.getText(), edad, peso, (NivelCuidado) nivelCuidadoCombo.getSelectedItem());
+                mascotaController.registrarExotico(dueno.getId(), nombreField.getText(), edad, peso, (NivelCuidado) nivelCuidadoCombo.getSelectedItem());
             }
             limpiar();
             onChange.run();
@@ -219,7 +230,7 @@ public class MascotasPanel extends JPanel implements RefreshablePanel {
         try {
             Mascota primera = (Mascota) compararPrimera.getSelectedItem();
             Mascota segunda = (Mascota) compararSegunda.getSelectedItem();
-            int resultado = service.compararMascotas(primera, segunda);
+            int resultado = mascotaController.compararMascotas(primera, segunda);
             String mensaje = resultado == 0 ? "Ambas tienen el mismo costo base." :
                     resultado > 0 ? primera.getNombre() + " es mas costosa." : segunda.getNombre() + " es mas costosa.";
             javax.swing.JOptionPane.showMessageDialog(this, mensaje);
@@ -247,7 +258,7 @@ public class MascotasPanel extends JPanel implements RefreshablePanel {
         mascotasModel.clear();
         compararPrimera.removeAllItems();
         compararSegunda.removeAllItems();
-        for (Mascota mascota : service.getMascotas()) {
+        for (Mascota mascota : mascotaController.getMascotas()) {
             mascotasModel.addElement(mascota);
             compararPrimera.addItem(mascota);
             compararSegunda.addItem(mascota);

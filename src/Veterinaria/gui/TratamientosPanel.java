@@ -25,7 +25,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import Veterinaria.controladores.TratamientoController;
+
 public class TratamientosPanel extends JPanel implements RefreshablePanel {
+    private final TratamientoController tratamientoController;
     private final ClinicaVeterinariaService service;
     private final Runnable onChange;
     private final DefaultComboBoxModel<Mascota> mascotasModel;
@@ -46,6 +49,11 @@ public class TratamientosPanel extends JPanel implements RefreshablePanel {
     private final JTextArea detalle;
 
     public TratamientosPanel(ClinicaVeterinariaService service, Runnable onChange) {
+        this(service.getTratamientoController(), service, onChange);
+    }
+
+    public TratamientosPanel(TratamientoController tratamientoController, ClinicaVeterinariaService service, Runnable onChange) {
+        this.tratamientoController = tratamientoController;
         this.service = service;
         this.onChange = onChange;
         this.mascotasModel = new DefaultComboBoxModel<>();
@@ -148,13 +156,13 @@ public class TratamientosPanel extends JPanel implements RefreshablePanel {
             String tipo = (String) tipoCombo.getSelectedItem();
             Estado estado = (Estado) estadoCombo.getSelectedItem();
             if ("Preventivo".equals(tipo)) {
-                service.registrarPreventivo(mascota.getId(), nombreField.getText(), fechaField.getText(), estado,
+                tratamientoController.registrarPreventivo(mascota.getId(), nombreField.getText(), fechaField.getText(), estado,
                         Integer.parseInt(frecuenciaField.getText()));
             } else if ("Curativo".equals(tipo)) {
-                service.registrarCurativo(mascota.getId(), nombreField.getText(), fechaField.getText(), estado,
+                tratamientoController.registrarCurativo(mascota.getId(), nombreField.getText(), fechaField.getText(), estado,
                         Integer.parseInt(duracionField.getText()), diagnosticoField.getText());
             } else {
-                service.registrarCirujia(mascota.getId(), nombreField.getText(), fechaField.getText(), estado,
+                tratamientoController.registrarCirujia(mascota.getId(), nombreField.getText(), fechaField.getText(), estado,
                         tipoCirujiaField.getText(), (NivelComplejidad) complejidadCombo.getSelectedItem());
             }
             limpiar();
@@ -207,7 +215,7 @@ public class TratamientosPanel extends JPanel implements RefreshablePanel {
             mascotasModel.addElement(mascota);
         }
         tratamientosModel.clear();
-        for (Tratamiento tratamiento : service.getTratamientos()) {
+        for (Tratamiento tratamiento : tratamientoController.getTratamientos()) {
             tratamientosModel.addElement(tratamiento);
         }
     }

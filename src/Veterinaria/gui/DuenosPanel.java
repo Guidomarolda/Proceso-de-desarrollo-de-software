@@ -16,8 +16,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import Veterinaria.controladores.DuenoController;
+
 public class DuenosPanel extends JPanel implements RefreshablePanel {
-    private final ClinicaVeterinariaService service;
+    private final DuenoController duenoController;
     private final Runnable onChange;
     private final JTextField nombreField;
     private final JTextField apellidoField;
@@ -28,7 +30,11 @@ public class DuenosPanel extends JPanel implements RefreshablePanel {
     private final JTextArea detalle;
 
     public DuenosPanel(ClinicaVeterinariaService service, Runnable onChange) {
-        this.service = service;
+        this(service.getDuenoController(), onChange);
+    }
+
+    public DuenosPanel(DuenoController duenoController, Runnable onChange) {
+        this.duenoController = duenoController;
         this.onChange = onChange;
         this.nombreField = new JTextField(18);
         this.apellidoField = new JTextField(18);
@@ -79,7 +85,7 @@ public class DuenosPanel extends JPanel implements RefreshablePanel {
 
     private void registrarDueno() {
         try {
-            service.registrarDueno(nombreField.getText(), apellidoField.getText(), telefonoField.getText(), correoField.getText());
+            duenoController.registrarDueno(nombreField.getText(), apellidoField.getText(), telefonoField.getText(), correoField.getText());
             nombreField.setText("");
             apellidoField.setText("");
             telefonoField.setText("");
@@ -107,7 +113,7 @@ public class DuenosPanel extends JPanel implements RefreshablePanel {
     public void refreshData() {
         Dueño seleccionado = lista.getSelectedValue();
         model.clear();
-        for (Dueño dueno : service.getDuenos()) {
+        for (Dueño dueno : duenoController.getDuenos()) {
             model.addElement(dueno);
         }
         if (seleccionado != null) {
