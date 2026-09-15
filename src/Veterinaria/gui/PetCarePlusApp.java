@@ -1,5 +1,11 @@
 package Veterinaria.gui;
 
+import Veterinaria.ClinicaVeterinaria;
+import Veterinaria.controladores.DuenoController;
+import Veterinaria.controladores.MascotaController;
+import Veterinaria.controladores.TratamientoController;
+import Veterinaria.controladores.ConsultaController;
+import Veterinaria.servicios.ConsultaVeterinariaService;
 import Veterinaria.persistencia.ArchivoClinicaRepository;
 import Veterinaria.servicios.ClinicaVeterinariaService;
 
@@ -14,9 +20,14 @@ public class PetCarePlusApp {
             } catch (Exception ignored) {
             }
 
-            ClinicaVeterinariaService service = new ClinicaVeterinariaService(new ArchivoClinicaRepository());
+            ClinicaVeterinaria clinica = new ClinicaVeterinaria();
+            ClinicaVeterinariaService service =
+                    new ClinicaVeterinariaService(new ArchivoClinicaRepository(), clinica);
             service.cargarDatos();
-            MainFrame frame = new MainFrame(service);
+            ConsultaController consultas =
+                    new ConsultaController(new ConsultaVeterinariaService(clinica));
+            MainFrame frame = new MainFrame(new DuenoController(service),
+                    new MascotaController(service), new TratamientoController(service), consultas);
             frame.setVisible(true);
         });
     }

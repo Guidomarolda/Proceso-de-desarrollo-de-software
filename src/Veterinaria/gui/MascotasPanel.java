@@ -11,7 +11,6 @@ import Veterinaria.Mascota;
 import Veterinaria.NivelCuidado;
 import Veterinaria.Perro;
 import Veterinaria.Tipo;
-import Veterinaria.servicios.ClinicaVeterinariaService;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -30,10 +29,11 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import Veterinaria.controladores.MascotaController;
+import Veterinaria.controladores.ConsultaController;
 
 public class MascotasPanel extends JPanel implements RefreshablePanel {
     private final MascotaController mascotaController;
-    private final ClinicaVeterinariaService service;
+    private final ConsultaController consultaController;
     private final Runnable onChange;
     private final DefaultComboBoxModel<Dueño> duenosModel;
     private final JComboBox<Dueño> duenosCombo;
@@ -53,13 +53,9 @@ public class MascotasPanel extends JPanel implements RefreshablePanel {
     private final JComboBox<Mascota> compararPrimera;
     private final JComboBox<Mascota> compararSegunda;
 
-    public MascotasPanel(ClinicaVeterinariaService service, Runnable onChange) {
-        this(service.getMascotaController(), service, onChange);
-    }
-
-    public MascotasPanel(MascotaController mascotaController, ClinicaVeterinariaService service, Runnable onChange) {
+    public MascotasPanel(MascotaController mascotaController, ConsultaController consultaController, Runnable onChange) {
         this.mascotaController = mascotaController;
-        this.service = service;
+        this.consultaController = consultaController;
         this.onChange = onChange;
         this.duenosModel = new DefaultComboBoxModel<>();
         this.duenosCombo = new JComboBox<>(duenosModel);
@@ -218,7 +214,7 @@ public class MascotasPanel extends JPanel implements RefreshablePanel {
         builder.append("Peso: ").append(mascota.getPeso()).append("\n");
         builder.append("Costo base: ").append(mascota.costoBaseAtencion()).append("\n");
         builder.append("Apta especial: ").append(mascota.esAptaParaProcedimientoEspecial() ? "Si" : "No").append("\n");
-        builder.append("Tratamientos: ").append(mascota.getTratamientos().size()).append("\n");
+        builder.append("Tratamientos: ").append(mascota.cantidadTratamientos()).append("\n");
         if (mascota instanceof Perro) builder.append("Raza: ").append(((Perro) mascota).getRaza()).append("\n");
         if (mascota instanceof Gato) builder.append("Vacunado: ").append(((Gato) mascota).getEstaVacunado()).append("\n");
         if (mascota instanceof Ave) builder.append("Tipo: ").append(((Ave) mascota).getTipo()).append("\n");
@@ -230,7 +226,7 @@ public class MascotasPanel extends JPanel implements RefreshablePanel {
         try {
             Mascota primera = (Mascota) compararPrimera.getSelectedItem();
             Mascota segunda = (Mascota) compararSegunda.getSelectedItem();
-            int resultado = mascotaController.compararMascotas(primera, segunda);
+            int resultado = consultaController.compararMascotas(primera, segunda);
             String mensaje = resultado == 0 ? "Ambas tienen el mismo costo base." :
                     resultado > 0 ? primera.getNombre() + " es mas costosa." : segunda.getNombre() + " es mas costosa.";
             javax.swing.JOptionPane.showMessageDialog(this, mensaje);
@@ -252,7 +248,7 @@ public class MascotasPanel extends JPanel implements RefreshablePanel {
     @Override
     public void refreshData() {
         duenosModel.removeAllElements();
-        for (Dueño dueno : service.getDuenos()) {
+        for (Dueño dueno : mascotaController.getDuenos()) {
             duenosModel.addElement(dueno);
         }
         mascotasModel.clear();

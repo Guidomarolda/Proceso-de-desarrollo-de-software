@@ -1,25 +1,25 @@
 package Veterinaria.servicios;
 
 import Veterinaria.Dueño;
+import Veterinaria.ClinicaVeterinaria;
 import Veterinaria.Mascota;
 import Veterinaria.Tratamiento;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Servicio especializado en consultas, reportes y calculos analiticos.
- * Resuelve el problema de baja cohesion (God Class) en ClinicaVeterinariaService.
+ * Consulta el modelo compartido y delega los calculos a sus expertos.
  */
 public class ConsultaVeterinariaService {
-    private final ClinicaVeterinariaService clinicaService;
+    private final ClinicaVeterinaria clinicaService;
 
-    public ConsultaVeterinariaService(ClinicaVeterinariaService clinicaService) {
+    public ConsultaVeterinariaService(ClinicaVeterinaria clinicaService) {
         if (clinicaService == null) {
-            throw new IllegalArgumentException("El servicio de clinica no puede ser nulo.");
+            throw new IllegalArgumentException("La clinica no puede ser nula.");
         }
         this.clinicaService = clinicaService;
     }
@@ -48,12 +48,12 @@ public class ConsultaVeterinariaService {
 
     public Map<Mascota, Integer> resumenTratamientosPorMascota(Dueño dueno) {
         validarNoNulo(dueno, "dueno");
-        Map<Mascota, Integer> resumen = new LinkedHashMap<>();
-        for (Mascota mascota : dueno.getMascotas()) {
-            resumen.put(mascota, mascota.getTratamientos().size());
-        }
-        return resumen;
+        return dueno.obtenerResumenTratamientos();
     }
+
+    public List<Dueño> getDuenos() { return clinicaService.getDuenos(); }
+    public List<Mascota> getMascotas() { return clinicaService.getMascotas(); }
+    public List<Tratamiento> getTratamientos() { return clinicaService.getTratamientos(); }
 
     private void validarNoNulo(Object valor, String campo) {
         if (valor == null) {

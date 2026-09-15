@@ -1,7 +1,6 @@
 package Veterinaria.controladores;
 
 import Veterinaria.Dueño;
-import Veterinaria.Mascota;
 import Veterinaria.servicios.ClinicaVeterinariaService;
 
 import java.util.List;
@@ -20,10 +19,7 @@ public class DuenoController {
     }
 
     public Dueño registrarDueno(String nombre, String apellido, String telefono, String correo) {
-        Dueño dueno = new Dueño(nombre, apellido, telefono, correo, (Mascota) null);
-        service.getDuenosListModificable().add(dueno);
-        service.guardarDatos();
-        return dueno;
+        return service.registrarDueno(nombre, apellido, telefono, correo);
     }
 
     public List<Dueño> getDuenos() {

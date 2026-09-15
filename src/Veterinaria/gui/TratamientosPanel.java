@@ -7,7 +7,6 @@ import Veterinaria.NivelComplejidad;
 import Veterinaria.Tratamiento;
 import Veterinaria.TratamientoCurativo;
 import Veterinaria.TratamientoPreventivo;
-import Veterinaria.servicios.ClinicaVeterinariaService;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -29,7 +28,6 @@ import Veterinaria.controladores.TratamientoController;
 
 public class TratamientosPanel extends JPanel implements RefreshablePanel {
     private final TratamientoController tratamientoController;
-    private final ClinicaVeterinariaService service;
     private final Runnable onChange;
     private final DefaultComboBoxModel<Mascota> mascotasModel;
     private final JComboBox<Mascota> mascotasCombo;
@@ -48,13 +46,8 @@ public class TratamientosPanel extends JPanel implements RefreshablePanel {
     private final JList<Tratamiento> tratamientosList;
     private final JTextArea detalle;
 
-    public TratamientosPanel(ClinicaVeterinariaService service, Runnable onChange) {
-        this(service.getTratamientoController(), service, onChange);
-    }
-
-    public TratamientosPanel(TratamientoController tratamientoController, ClinicaVeterinariaService service, Runnable onChange) {
+    public TratamientosPanel(TratamientoController tratamientoController, Runnable onChange) {
         this.tratamientoController = tratamientoController;
-        this.service = service;
         this.onChange = onChange;
         this.mascotasModel = new DefaultComboBoxModel<>();
         this.mascotasCombo = new JComboBox<>(mascotasModel);
@@ -211,7 +204,7 @@ public class TratamientosPanel extends JPanel implements RefreshablePanel {
     @Override
     public void refreshData() {
         mascotasModel.removeAllElements();
-        for (Mascota mascota : service.getMascotas()) {
+        for (Mascota mascota : tratamientoController.getMascotas()) {
             mascotasModel.addElement(mascota);
         }
         tratamientosModel.clear();

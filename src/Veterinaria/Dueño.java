@@ -3,6 +3,8 @@ package Veterinaria;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.UUID;
 
 public class Dueño {
@@ -94,6 +96,15 @@ public class Dueño {
         if (!mascotas.contains(mascota)) {
             mascotas.add(mascota);
         }
+    }
+
+    /** Experto: cada dueño conoce las mascotas de su resumen. */
+    public Map<Mascota, Integer> obtenerResumenTratamientos() {
+        Map<Mascota, Integer> resumen = new LinkedHashMap<>();
+        for (Mascota mascota : mascotas) {
+            resumen.put(mascota, mascota.cantidadTratamientos());
+        }
+        return Collections.unmodifiableMap(resumen);
     }
 
     public List<Mascota> getMascotas() {

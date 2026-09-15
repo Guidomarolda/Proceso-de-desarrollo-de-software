@@ -1,7 +1,6 @@
 package Veterinaria.gui;
 
 import Veterinaria.Dueño;
-import Veterinaria.servicios.ClinicaVeterinariaService;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -28,10 +27,6 @@ public class DuenosPanel extends JPanel implements RefreshablePanel {
     private final DefaultListModel<Dueño> model;
     private final JList<Dueño> lista;
     private final JTextArea detalle;
-
-    public DuenosPanel(ClinicaVeterinariaService service, Runnable onChange) {
-        this(service.getDuenoController(), onChange);
-    }
 
     public DuenosPanel(DuenoController duenoController, Runnable onChange) {
         this.duenoController = duenoController;

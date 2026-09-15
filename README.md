@@ -14,7 +14,7 @@ El objetivo del programa es administrar la informacion principal de una clinica 
 - costos de atencion y tratamiento;
 - reglas de aptitud y seguimiento.
 
-La logica de negocio no esta dentro de la interfaz grafica. La GUI solo solicita datos, muestra informacion y ejecuta acciones a traves de servicios.
+La GUI solicita datos, muestra informacion y envia las operaciones a controladores GRASP, que delegan en servicios y entidades del dominio.
 
 ## Funcionalidades principales
 
@@ -130,6 +130,9 @@ src/Veterinaria
 src/Veterinaria/servicios
     Servicios de aplicacion.
 
+src/Veterinaria/controladores
+    Recepcion de eventos de registro y consulta desde la GUI.
+
 src/Veterinaria/persistencia
     Lectura y escritura de archivos.
 
@@ -140,7 +143,10 @@ src/Veterinaria/gui
 Clases destacadas:
 
 - `Main`: punto de entrada principal. Inicia la aplicacion grafica.
-- `ClinicaVeterinariaService`: coordina registros, consultas, calculos y guardado.
+- `ClinicaVeterinaria`: mantiene los registros y realiza las busquedas del dominio.
+- `ClinicaVeterinariaService`: coordina registros y guardado mediante `ClinicaRepository`.
+- `ConsultaVeterinariaService`: realiza consultas sobre el mismo modelo de clinica.
+- `DuenoController`, `MascotaController`, `TratamientoController`, `ConsultaController`: reciben las solicitudes de los paneles.
 - `ArchivoClinicaRepository`: carga y guarda los datos en archivos CSV.
 - `MainFrame`: ventana principal de Swing.
 - `DuenosPanel`, `MascotasPanel`, `TratamientosPanel`, `ConsultasPanel`: paneles de la interfaz.
@@ -156,7 +162,7 @@ La ventana principal usa pestanas:
 - `Tratamientos`: permite registrar tratamientos para una mascota y consultar costo, estado y seguimiento.
 - `Consultas`: permite calcular el costo total de una consulta, ver resumen de tratamientos por mascota y listar tratamientos que requieren seguimiento.
 
-Los botones y formularios no contienen reglas de negocio. Cuando el usuario ejecuta una accion, la interfaz llama a `ClinicaVeterinariaService`, y el servicio usa las clases del dominio y la persistencia.
+Los botones envian los registros y consultas a los controladores. Estos delegan en los servicios, que utilizan el dominio y el contrato de persistencia. `PetCarePlusApp` construye y conecta estas dependencias al iniciar. Los servicios no conocen a los controladores.
 
 ## Persistencia mediante archivos
 
@@ -291,7 +297,7 @@ Se mantienen y usan decisiones orientadas a objetos:
 - Repository para aislar el acceso a archivos en `ArchivoClinicaRepository`.
 - Service Layer en `ClinicaVeterinariaService` para evitar que la GUI use directamente archivos o distribuya reglas de aplicacion.
 
-Esta organizacion deja el proyecto preparado para futuras mejoras con principios SOLID, por ejemplo separar repositorios por entidad, agregar interfaces de repositorio o incorporar nuevos tipos de mascotas/tratamientos sin modificar la interfaz de forma invasiva.
+La interfaz `ClinicaRepository` permite sustituir la persistencia sin cambiar el servicio de registros. Los mapeadores CSV encapsulan la conversion especifica de cada entidad.
 
 ## Cambios respecto del proyecto original
 

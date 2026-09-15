@@ -3,7 +3,6 @@ package Veterinaria.gui;
 import Veterinaria.Dueño;
 import Veterinaria.Mascota;
 import Veterinaria.Tratamiento;
-import Veterinaria.servicios.ClinicaVeterinariaService;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -18,24 +17,18 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.util.Map;
 
-import Veterinaria.servicios.ConsultaVeterinariaService;
+import Veterinaria.controladores.ConsultaController;
 
 public class ConsultasPanel extends JPanel implements RefreshablePanel {
-    private final ClinicaVeterinariaService service;
-    private final ConsultaVeterinariaService consultaService;
+    private final ConsultaController controller;
     private final JComboBox<Mascota> mascotaCostoCombo;
     private final JComboBox<Tratamiento> tratamientoCostoCombo;
     private final JComboBox<Dueño> duenoResumenCombo;
     private final JTextArea resultado;
     private final DefaultListModel<Tratamiento> seguimientoModel;
 
-    public ConsultasPanel(ClinicaVeterinariaService service) {
-        this(service, service.getConsultaService());
-    }
-
-    public ConsultasPanel(ClinicaVeterinariaService service, ConsultaVeterinariaService consultaService) {
-        this.service = service;
-        this.consultaService = consultaService != null ? consultaService : service.getConsultaService();
+    public ConsultasPanel(ConsultaController controller) {
+        this.controller = controller;
         this.mascotaCostoCombo = new JComboBox<>();
         this.tratamientoCostoCombo = new JComboBox<>();
         this.duenoResumenCombo = new JComboBox<>();
@@ -83,7 +76,7 @@ public class ConsultasPanel extends JPanel implements RefreshablePanel {
         try {
             Mascota mascota = (Mascota) mascotaCostoCombo.getSelectedItem();
             Tratamiento tratamiento = (Tratamiento) tratamientoCostoCombo.getSelectedItem();
-            Double costo = consultaService.calcularCostoTotal(mascota, tratamiento);
+            Double costo = controller.calcularCostoTotal(mascota, tratamiento);
             resultado.setText("Costo total de consulta: " + costo);
         } catch (Exception e) {
             MainFrame.mostrarError(e);
@@ -93,7 +86,7 @@ public class ConsultasPanel extends JPanel implements RefreshablePanel {
     private void mostrarResumen() {
         try {
             Dueño dueno = (Dueño) duenoResumenCombo.getSelectedItem();
-            Map<Mascota, Integer> resumen = consultaService.resumenTratamientosPorMascota(dueno);
+            Map<Mascota, Integer> resumen = controller.resumenTratamientosPorMascota(dueno);
             StringBuilder builder = new StringBuilder();
             builder.append("Resumen de tratamientos por mascota\n");
             for (Map.Entry<Mascota, Integer> entry : resumen.entrySet()) {
@@ -107,11 +100,11 @@ public class ConsultasPanel extends JPanel implements RefreshablePanel {
 
     @Override
     public void refreshData() {
-        cargarCombo(mascotaCostoCombo, service.getMascotas());
-        cargarCombo(tratamientoCostoCombo, service.getTratamientos());
-        cargarCombo(duenoResumenCombo, service.getDuenos());
+        cargarCombo(mascotaCostoCombo, controller.getMascotas());
+        cargarCombo(tratamientoCostoCombo, controller.getTratamientos());
+        cargarCombo(duenoResumenCombo, controller.getDuenos());
         seguimientoModel.clear();
-        for (Tratamiento tratamiento : consultaService.tratamientosQueRequierenSeguimiento()) {
+        for (Tratamiento tratamiento : controller.tratamientosQueRequierenSeguimiento()) {
             seguimientoModel.addElement(tratamiento);
         }
     }

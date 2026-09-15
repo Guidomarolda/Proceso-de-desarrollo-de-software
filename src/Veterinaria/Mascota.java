@@ -105,6 +105,10 @@ public abstract class Mascota implements Comparable<Mascota> {
         }
     }
 
+    public int cantidadTratamientos() {
+        return tratamientos.size();
+    }
+
     public List<Tratamiento> getTratamientos() {
         return Collections.unmodifiableList(tratamientos);
     }

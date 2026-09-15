@@ -1,6 +1,9 @@
 package Veterinaria.gui;
 
-import Veterinaria.servicios.ClinicaVeterinariaService;
+import Veterinaria.controladores.DuenoController;
+import Veterinaria.controladores.MascotaController;
+import Veterinaria.controladores.TratamientoController;
+import Veterinaria.controladores.ConsultaController;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -12,7 +15,8 @@ import java.util.List;
 public class MainFrame extends JFrame {
     private final List<RefreshablePanel> panels;
 
-    public MainFrame(ClinicaVeterinariaService service) {
+    public MainFrame(DuenoController duenoController, MascotaController mascotaController,
+                     TratamientoController tratamientoController, ConsultaController consultaController) {
         super("PetCare Plus");
         this.panels = new ArrayList<>();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -21,10 +25,10 @@ public class MainFrame extends JFrame {
         setLayout(new BorderLayout());
 
         JTabbedPane tabs = new JTabbedPane();
-        DuenosPanel duenosPanel = new DuenosPanel(service, this::refreshAll);
-        MascotasPanel mascotasPanel = new MascotasPanel(service, this::refreshAll);
-        TratamientosPanel tratamientosPanel = new TratamientosPanel(service, this::refreshAll);
-        ConsultasPanel consultasPanel = new ConsultasPanel(service);
+        DuenosPanel duenosPanel = new DuenosPanel(duenoController, this::refreshAll);
+        MascotasPanel mascotasPanel = new MascotasPanel(mascotaController, consultaController, this::refreshAll);
+        TratamientosPanel tratamientosPanel = new TratamientosPanel(tratamientoController, this::refreshAll);
+        ConsultasPanel consultasPanel = new ConsultasPanel(consultaController);
 
         panels.add(duenosPanel);
         panels.add(mascotasPanel);
