@@ -1,7 +1,7 @@
 package Veterinaria.controladores;
 
 import Veterinaria.Dueño;
-import Veterinaria.servicios.ClinicaVeterinariaService;
+import Veterinaria.servicios.DuenoService;
 
 import java.util.List;
 
@@ -9,11 +9,11 @@ import java.util.List;
  * Controlador GRASP especializado en las solicitudes y eventos sobre Dueños.
  */
 public class DuenoController {
-    private final ClinicaVeterinariaService service;
+    private final DuenoService service;
 
-    public DuenoController(ClinicaVeterinariaService service) {
+    public DuenoController(DuenoService service) {
         if (service == null) {
-            throw new IllegalArgumentException("El servicio de clinica no puede ser nulo.");
+            throw new IllegalArgumentException("El servicio de dueños no puede ser nulo.");
         }
         this.service = service;
     }

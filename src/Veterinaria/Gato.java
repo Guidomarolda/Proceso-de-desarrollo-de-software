@@ -40,5 +40,15 @@ public class Gato extends  Mascota {
             return costoBase;
         }
     }
+
+    @Override
+    public String getTipoRegistro() {
+        return "GATO";
+    }
+
+    @Override
+    public String getDatoExtra() {
+        return String.valueOf(estaVacunado);
+    }
 }
 

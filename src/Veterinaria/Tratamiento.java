@@ -58,6 +58,10 @@ public abstract class Tratamiento {
     //de tipo boolean debido a que es un aviso simplemente con 2 respuestas posibles
     public abstract Boolean requiereAtencionUrgente();
 
+    public abstract String getTipoRegistro();
+    public abstract String getDatoExtra1();
+    public abstract String getDatoExtra2();
+
     protected String validarTexto(String valor, String campo) {
         if (valor == null || valor.trim().isEmpty()) {
             throw new IllegalArgumentException("El campo " + campo + " es obligatorio.");

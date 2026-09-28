@@ -34,4 +34,14 @@ private  Tipo tipo;
         Double costoBase = 300.0 + getEdad()*20;
         return  costoBase;
     }
+
+    @Override
+    public String getTipoRegistro() {
+        return "AVE";
+    }
+
+    @Override
+    public String getDatoExtra() {
+        return tipo.name();
+    }
 }

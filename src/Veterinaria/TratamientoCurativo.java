@@ -52,5 +52,18 @@ public class TratamientoCurativo extends Tratamiento{
         }
     }
 
+    @Override
+    public String getTipoRegistro() {
+        return "CURATIVO";
+    }
 
+    @Override
+    public String getDatoExtra1() {
+        return String.valueOf(duracion);
+    }
+
+    @Override
+    public String getDatoExtra2() {
+        return diagnostico;
+    }
 }

@@ -41,4 +41,19 @@ public class TratamientoPreventivo extends  Tratamiento{
             return false;
         }
     }
+
+    @Override
+    public String getTipoRegistro() {
+        return "PREVENTIVO";
+    }
+
+    @Override
+    public String getDatoExtra1() {
+        return String.valueOf(frecuenciaRecomendada);
+    }
+
+    @Override
+    public String getDatoExtra2() {
+        return "";
+    }
 }

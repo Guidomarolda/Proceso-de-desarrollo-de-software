@@ -3,17 +3,17 @@ package Veterinaria.controladores;
 import Veterinaria.Dueño;
 import Veterinaria.Mascota;
 import Veterinaria.Tratamiento;
-import Veterinaria.servicios.ConsultaVeterinariaService;
+import Veterinaria.servicios.ConsultaService;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 /** Recibe los eventos de consulta y comparacion de la interfaz. */
 public class ConsultaController {
-    private final ConsultaVeterinariaService service;
+    private final ConsultaService service;
 
-    public ConsultaController(ConsultaVeterinariaService service) {
-        this.service = Objects.requireNonNull(service);
+    public ConsultaController(ConsultaService service) {
+        this.service = Objects.requireNonNull(service, "El servicio de consultas es obligatorio.");
     }
 
     public Double calcularCostoTotal(Mascota mascota, Tratamiento tratamiento) {

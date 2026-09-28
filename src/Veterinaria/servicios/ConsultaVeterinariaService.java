@@ -14,7 +14,7 @@ import java.util.Map;
  * Servicio especializado en consultas, reportes y calculos analiticos.
  * Consulta el modelo compartido y delega los calculos a sus expertos.
  */
-public class ConsultaVeterinariaService {
+public class ConsultaVeterinariaService implements ConsultaService {
     private final ClinicaVeterinaria clinicaService;
 
     public ConsultaVeterinariaService(ClinicaVeterinaria clinicaService) {

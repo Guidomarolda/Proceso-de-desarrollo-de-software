@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** Coordina los registros y su persistencia; delega las reglas a los expertos del dominio. */
-public class ClinicaVeterinariaService {
+public class ClinicaVeterinariaService implements DuenoService, MascotaService, TratamientoService {
     private final ClinicaRepository repository;
     private final ClinicaVeterinaria clinica;
 

@@ -10,9 +10,9 @@ final class TratamientoCsvMapper {
     }
 
     String aLinea(String mascotaId, Tratamiento tratamiento) {
-        return CsvUtils.linea(tratamiento.getId(), mascotaId, tipoTratamiento(tratamiento),
+        return CsvUtils.linea(tratamiento.getId(), mascotaId, tratamiento.getTipoRegistro(),
                 tratamiento.getNombreTratamiento(), tratamiento.getFechaInicio(),
-                tratamiento.getEstado().name(), extraTratamiento1(tratamiento), extraTratamiento2(tratamiento));
+                tratamiento.getEstado().name(), tratamiento.getDatoExtra1(), tratamiento.getDatoExtra2());
     }
 
     private Tratamiento crearTratamiento(List<String> campos) {
@@ -33,25 +33,5 @@ final class TratamientoCsvMapper {
             return new Cirujia(id, nombre, fechaInicio, estado, extra1, NivelComplejidad.valueOf(extra2));
         }
         throw new IllegalArgumentException("Tipo de tratamiento desconocido: " + tipo);
-    }
-
-    private String tipoTratamiento(Tratamiento tratamiento) {
-        if (tratamiento instanceof TratamientoPreventivo) return "PREVENTIVO";
-        if (tratamiento instanceof TratamientoCurativo) return "CURATIVO";
-        if (tratamiento instanceof Cirujia) return "CIRUJIA";
-        throw new IllegalArgumentException("Tipo de tratamiento no soportado.");
-    }
-
-    private String extraTratamiento1(Tratamiento tratamiento) {
-        if (tratamiento instanceof TratamientoPreventivo) return String.valueOf(((TratamientoPreventivo) tratamiento).getFrecuenciaRecomendada());
-        if (tratamiento instanceof TratamientoCurativo) return String.valueOf(((TratamientoCurativo) tratamiento).getDuracion());
-        if (tratamiento instanceof Cirujia) return ((Cirujia) tratamiento).getTipoCirujia();
-        return "";
-    }
-
-    private String extraTratamiento2(Tratamiento tratamiento) {
-        if (tratamiento instanceof TratamientoCurativo) return ((TratamientoCurativo) tratamiento).getDiagnostico();
-        if (tratamiento instanceof Cirujia) return ((Cirujia) tratamiento).getNivelComplejidad().name();
-        return "";
     }
 }

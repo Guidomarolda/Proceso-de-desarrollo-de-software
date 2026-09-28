@@ -31,4 +31,14 @@ public class Perro extends Mascota{
         Double costoBase = 500.0 + getEdad()*50.0;
         return costoBase;
     }
+
+    @Override
+    public String getTipoRegistro() {
+        return "PERRO";
+    }
+
+    @Override
+    public String getDatoExtra() {
+        return raza;
+    }
 }

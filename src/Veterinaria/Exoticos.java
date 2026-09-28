@@ -34,4 +34,14 @@ public class Exoticos extends  Mascota {
         Double costoBase = 800.0 + getEdad()*100.0;
         return  costoBase;
     }
+
+    @Override
+    public String getTipoRegistro() {
+        return "EXOTICO";
+    }
+
+    @Override
+    public String getDatoExtra() {
+        return nivelCuidado.name();
+    }
 }

@@ -4,7 +4,7 @@ import Veterinaria.Dueño;
 import Veterinaria.Mascota;
 import Veterinaria.NivelCuidado;
 import Veterinaria.Tipo;
-import Veterinaria.servicios.ClinicaVeterinariaService;
+import Veterinaria.servicios.MascotaService;
 
 import java.util.List;
 
@@ -13,11 +13,11 @@ import java.util.List;
  * Delega el registro y la asociacion al servicio de aplicacion.
  */
 public class MascotaController {
-    private final ClinicaVeterinariaService service;
+    private final MascotaService service;
 
-    public MascotaController(ClinicaVeterinariaService service) {
+    public MascotaController(MascotaService service) {
         if (service == null) {
-            throw new IllegalArgumentException("El servicio de clinica no puede ser nulo.");
+            throw new IllegalArgumentException("El servicio de mascotas no puede ser nulo.");
         }
         this.service = service;
     }

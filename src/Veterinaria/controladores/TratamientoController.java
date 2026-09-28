@@ -4,7 +4,7 @@ import Veterinaria.Estado;
 import Veterinaria.Mascota;
 import Veterinaria.NivelComplejidad;
 import Veterinaria.Tratamiento;
-import Veterinaria.servicios.ClinicaVeterinariaService;
+import Veterinaria.servicios.TratamientoService;
 
 import java.util.List;
 
@@ -12,11 +12,11 @@ import java.util.List;
  * Controlador GRASP especializado en solicitudes y ciclo de vida de Tratamientos.
  */
 public class TratamientoController {
-    private final ClinicaVeterinariaService service;
+    private final TratamientoService service;
 
-    public TratamientoController(ClinicaVeterinariaService service) {
+    public TratamientoController(TratamientoService service) {
         if (service == null) {
-            throw new IllegalArgumentException("El servicio de clinica no puede ser nulo.");
+            throw new IllegalArgumentException("El servicio de tratamientos no puede ser nulo.");
         }
         this.service = service;
     }

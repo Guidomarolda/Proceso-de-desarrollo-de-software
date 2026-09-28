@@ -71,4 +71,19 @@ public class Cirujia extends  Tratamiento{
             throw new CirujiaEnCursoException("El tratamiento no puede ser una cirujia en curso.");
         }
     }
+
+    @Override
+    public String getTipoRegistro() {
+        return "CIRUJIA";
+    }
+
+    @Override
+    public String getDatoExtra1() {
+        return tipoCirujia;
+    }
+
+    @Override
+    public String getDatoExtra2() {
+        return nivelComplejidad.name();
+    }
 }

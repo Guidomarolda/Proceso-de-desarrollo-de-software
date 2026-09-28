@@ -10,8 +10,8 @@ final class MascotaCsvMapper {
     }
 
     String aLinea(String duenoId, Mascota mascota) {
-        return CsvUtils.linea(mascota.getId(), duenoId, tipoMascota(mascota), mascota.getNombre(),
-                String.valueOf(mascota.getEdad()), String.valueOf(mascota.getPeso()), extraMascota(mascota));
+        return CsvUtils.linea(mascota.getId(), duenoId, mascota.getTipoRegistro(), mascota.getNombre(),
+                String.valueOf(mascota.getEdad()), String.valueOf(mascota.getPeso()), mascota.getDatoExtra());
     }
 
     private Mascota crearMascota(String id, String tipo, String nombre, int edad, Double peso, String extra) {
@@ -28,21 +28,5 @@ final class MascotaCsvMapper {
             return new Exoticos(id, peso, edad, nombre, NivelCuidado.valueOf(extra));
         }
         throw new IllegalArgumentException("Tipo de mascota desconocido: " + tipo);
-    }
-
-    private String tipoMascota(Mascota mascota) {
-        if (mascota instanceof Perro) return "PERRO";
-        if (mascota instanceof Gato) return "GATO";
-        if (mascota instanceof Ave) return "AVE";
-        if (mascota instanceof Exoticos) return "EXOTICO";
-        throw new IllegalArgumentException("Tipo de mascota no soportado.");
-    }
-
-    private String extraMascota(Mascota mascota) {
-        if (mascota instanceof Perro) return ((Perro) mascota).getRaza();
-        if (mascota instanceof Gato) return String.valueOf(((Gato) mascota).getEstaVacunado());
-        if (mascota instanceof Ave) return ((Ave) mascota).getTipo().name();
-        if (mascota instanceof Exoticos) return ((Exoticos) mascota).getNivelCuidado().name();
-        return "";
     }
 }

@@ -113,7 +113,11 @@ public abstract class Mascota implements Comparable<Mascota> {
         return Collections.unmodifiableList(tratamientos);
     }
 
-    public abstract  Double costoBaseAtencion();
+    public abstract Double costoBaseAtencion();
+
+    public abstract String getTipoRegistro();
+
+    public abstract String getDatoExtra();
 
     public Boolean esAptaParaProcedimientoEspecial() {
         return edad < 10 && peso < 30;
