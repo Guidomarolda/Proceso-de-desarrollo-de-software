@@ -1,7 +1,8 @@
 package Veterinaria.persistencia;
-import Veterinaria.Dueño;
-import Veterinaria.Mascota;
-import Veterinaria.Tratamiento;
+
+import Veterinaria.modelo.Dueño;
+import Veterinaria.modelo.Mascota;
+import Veterinaria.modelo.Tratamiento;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -87,7 +88,7 @@ public class ArchivoClinicaRepository implements ClinicaRepository {
                 Mascota mascota = mascotaMapper.desdeCampos(campos);
                 Dueño dueno = duenosPorId.get(duenoId);
                 if (dueno == null) {
-                    throw new IllegalStateException("Mascota sin dueño valido: " + mascota.getNombre());
+                    throw new IllegalStateException("Mascota sin dueno valido: " + mascota.getNombre());
                 }
                 dueno.agregarMascota(mascota);
                 mascotas.put(mascota.getId(), mascota);
@@ -147,5 +148,4 @@ public class ArchivoClinicaRepository implements ClinicaRepository {
         }
         Files.write(tratamientosArchivo, lineas, StandardCharsets.UTF_8);
     }
-
 }

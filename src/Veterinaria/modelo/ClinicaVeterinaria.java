@@ -1,11 +1,11 @@
-package Veterinaria;
+package Veterinaria.modelo;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-/** Experto en los registros de la clinica y creador de sus dueños. */
+/** Experto en los registros de la clinica y creador de sus duenos. */
 public class ClinicaVeterinaria {
     private final List<Dueño> duenos = new ArrayList<>();
 
@@ -18,7 +18,7 @@ public class ClinicaVeterinaria {
     public void reemplazarDuenos(List<Dueño> nuevosDuenos) {
         List<Dueño> copia = new ArrayList<>(Objects.requireNonNull(nuevosDuenos));
         for (Dueño dueno : copia) {
-            Objects.requireNonNull(dueno, "El dueño no puede ser nulo.");
+            Objects.requireNonNull(dueno, "El dueno no puede ser nulo.");
         }
         duenos.clear();
         duenos.addAll(copia);
@@ -48,7 +48,7 @@ public class ClinicaVeterinaria {
         for (Dueño dueno : duenos) {
             if (dueno.getId().equals(id)) return dueno;
         }
-        throw new IllegalArgumentException("No existe un dueño con el id indicado.");
+        throw new IllegalArgumentException("No existe un dueno con el id indicado.");
     }
 
     public Mascota buscarMascotaPorId(String id) {

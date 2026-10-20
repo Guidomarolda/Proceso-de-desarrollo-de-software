@@ -1,9 +1,9 @@
 package Veterinaria.servicios;
 
-import Veterinaria.Dueño;
-import Veterinaria.ClinicaVeterinaria;
-import Veterinaria.Mascota;
-import Veterinaria.Tratamiento;
+import Veterinaria.modelo.ClinicaVeterinaria;
+import Veterinaria.modelo.Dueño;
+import Veterinaria.modelo.Mascota;
+import Veterinaria.modelo.Tratamiento;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,18 +24,21 @@ public class ConsultaVeterinariaService implements ConsultaService {
         this.clinicaService = clinicaService;
     }
 
+    @Override
     public Double calcularCostoTotal(Mascota mascota, Tratamiento tratamiento) {
         validarNoNulo(mascota, "mascota");
         validarNoNulo(tratamiento, "tratamiento");
         return mascota.costoBaseAtencion() + tratamiento.costoFijo();
     }
 
+    @Override
     public int compararMascotas(Mascota primera, Mascota segunda) {
         validarNoNulo(primera, "primera mascota");
         validarNoNulo(segunda, "segunda mascota");
         return primera.compareTo(segunda);
     }
 
+    @Override
     public List<Tratamiento> tratamientosQueRequierenSeguimiento() {
         List<Tratamiento> tratamientos = new ArrayList<>();
         for (Tratamiento tratamiento : clinicaService.getTratamientos()) {
@@ -46,13 +49,17 @@ public class ConsultaVeterinariaService implements ConsultaService {
         return Collections.unmodifiableList(tratamientos);
     }
 
+    @Override
     public Map<Mascota, Integer> resumenTratamientosPorMascota(Dueño dueno) {
         validarNoNulo(dueno, "dueno");
         return dueno.obtenerResumenTratamientos();
     }
 
+    @Override
     public List<Dueño> getDuenos() { return clinicaService.getDuenos(); }
+    @Override
     public List<Mascota> getMascotas() { return clinicaService.getMascotas(); }
+    @Override
     public List<Tratamiento> getTratamientos() { return clinicaService.getTratamientos(); }
 
     private void validarNoNulo(Object valor, String campo) {

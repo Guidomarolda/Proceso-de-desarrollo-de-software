@@ -1,6 +1,6 @@
 package Veterinaria.persistencia;
 
-import Veterinaria.*;
+import Veterinaria.modelo.*;
 
 /** Traduce mascotas al formato CSV y reconstituye sus identificadores. */
 final class MascotaCsvMapper {

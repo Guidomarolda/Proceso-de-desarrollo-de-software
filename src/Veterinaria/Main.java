@@ -1,18 +1,20 @@
 package Veterinaria;
 
 import Veterinaria.gui.PetCarePlusApp;
+import Veterinaria.modelo.Dueño;
+import Veterinaria.modelo.Mascota;
+import Veterinaria.modelo.Tratamiento;
 
 import java.util.List;
 
 public class Main {
 
-    //metodo 1 del enunciado
-    public static Double calcularCostoTotal(Mascota mascota, Tratamiento tratamiento){
+    // metodo 1 del enunciado
+    public static Double calcularCostoTotal(Mascota mascota, Tratamiento tratamiento) {
         Double costoTotalCalculado = mascota.costoBaseAtencion() + tratamiento.costoFijo();
         return costoTotalCalculado;
-        
     }
-    
+
     public static long resumenTratamientosPorMascota(Dueño dueno, List<Tratamiento> tratamientos) {
         if (dueno == null) return 0;
         return tratamientos.stream()

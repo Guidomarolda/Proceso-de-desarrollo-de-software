@@ -1,19 +1,19 @@
 package Veterinaria.controladores;
 
-import Veterinaria.Dueño;
+import Veterinaria.modelo.Dueño;
 import Veterinaria.servicios.DuenoService;
 
 import java.util.List;
 
 /**
- * Controlador GRASP especializado en las solicitudes y eventos sobre Dueños.
+ * Controlador MVC/GRASP especializado en las solicitudes y eventos sobre Duenos.
  */
 public class DuenoController {
     private final DuenoService service;
 
     public DuenoController(DuenoService service) {
         if (service == null) {
-            throw new IllegalArgumentException("El servicio de dueños no puede ser nulo.");
+            throw new IllegalArgumentException("El servicio de duenos no puede ser nulo.");
         }
         this.service = service;
     }
@@ -28,5 +28,12 @@ public class DuenoController {
 
     public Dueño buscarDuenoPorId(String id) {
         return service.buscarDuenoPorId(id);
+    }
+
+    public String obtenerDetalle(Dueño dueno) {
+        if (dueno == null) {
+            return "";
+        }
+        return dueno.obtenerDetalle();
     }
 }

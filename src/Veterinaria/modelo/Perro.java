@@ -1,8 +1,8 @@
-package Veterinaria;
+package Veterinaria.modelo;
 
 import java.util.UUID;
 
-public class Perro extends Mascota{
+public class Perro extends Mascota {
     private String raza;
 
     public Perro(Tratamiento tratamiento, Double peso, int edad, String nombre, String raza) {
@@ -28,7 +28,7 @@ public class Perro extends Mascota{
 
     @Override
     public Double costoBaseAtencion() {
-        Double costoBase = 500.0 + getEdad()*50.0;
+        Double costoBase = 500.0 + getEdad() * 50.0;
         return costoBase;
     }
 
@@ -40,5 +40,10 @@ public class Perro extends Mascota{
     @Override
     public String getDatoExtra() {
         return raza;
+    }
+
+    @Override
+    public String getDescripcionExtra() {
+        return "Raza: " + raza;
     }
 }

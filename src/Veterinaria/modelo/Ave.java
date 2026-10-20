@@ -1,9 +1,9 @@
-package Veterinaria;
+package Veterinaria.modelo;
 
 import java.util.UUID;
 
 public class Ave extends Mascota {
-private  Tipo tipo;
+    private Tipo tipo;
 
     public Ave(Tratamiento tratamiento, Double peso, int edad, String nombre, Tipo tipo) {
         this(UUID.randomUUID().toString(), tratamiento, peso, edad, nombre, tipo);
@@ -31,8 +31,8 @@ private  Tipo tipo;
 
     @Override
     public Double costoBaseAtencion() {
-        Double costoBase = 300.0 + getEdad()*20;
-        return  costoBase;
+        Double costoBase = 300.0 + getEdad() * 20;
+        return costoBase;
     }
 
     @Override
@@ -43,5 +43,10 @@ private  Tipo tipo;
     @Override
     public String getDatoExtra() {
         return tipo.name();
+    }
+
+    @Override
+    public String getDescripcionExtra() {
+        return "Tipo: " + tipo;
     }
 }

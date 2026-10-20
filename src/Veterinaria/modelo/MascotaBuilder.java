@@ -1,9 +1,9 @@
-package Veterinaria;
+package Veterinaria.modelo;
 
 import java.util.UUID;
 
 /**
- * Builder para construir objetos Mascota de forma más legible.
+ * Builder para construir objetos Mascota de forma mas legible.
  */
 public class MascotaBuilder {
     private String id;

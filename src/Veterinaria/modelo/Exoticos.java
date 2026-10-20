@@ -1,8 +1,8 @@
-package Veterinaria;
+package Veterinaria.modelo;
 
 import java.util.UUID;
 
-public class Exoticos extends  Mascota {
+public class Exoticos extends Mascota {
     private NivelCuidado nivelCuidado;
 
     public Exoticos(Tratamiento tratamiento, Double peso, int edad, String nombre, NivelCuidado nivelCuidado) {
@@ -31,8 +31,8 @@ public class Exoticos extends  Mascota {
 
     @Override
     public Double costoBaseAtencion() {
-        Double costoBase = 800.0 + getEdad()*100.0;
-        return  costoBase;
+        Double costoBase = 800.0 + getEdad() * 100.0;
+        return costoBase;
     }
 
     @Override
@@ -43,5 +43,10 @@ public class Exoticos extends  Mascota {
     @Override
     public String getDatoExtra() {
         return nivelCuidado.name();
+    }
+
+    @Override
+    public String getDescripcionExtra() {
+        return "Nivel cuidado: " + nivelCuidado;
     }
 }

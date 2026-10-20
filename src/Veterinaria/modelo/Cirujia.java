@@ -1,6 +1,8 @@
-package Veterinaria;
+package Veterinaria.modelo;
 
-public class Cirujia extends  Tratamiento{
+import java.util.UUID;
+
+public class Cirujia extends Tratamiento {
     private String tipoCirujia;
     private NivelComplejidad nivelComplejidad;
 
@@ -16,7 +18,7 @@ public class Cirujia extends  Tratamiento{
     }
 
     public Cirujia(String nombreTratamiento, String fechaInicio, Estado estado, String tipoCirujia, NivelComplejidad nivelComplejidad) {
-        this(java.util.UUID.randomUUID().toString(), nombreTratamiento, fechaInicio, estado, tipoCirujia, nivelComplejidad);
+        this(UUID.randomUUID().toString(), nombreTratamiento, fechaInicio, estado, tipoCirujia, nivelComplejidad);
     }
 
     public String getTipoCirujia() {
@@ -37,21 +39,16 @@ public class Cirujia extends  Tratamiento{
         }
         this.nivelComplejidad = nivelComplejidad;
     }
-// en este metodo se ven todaslas cirujias segun su nivel de complejidad
+
     @Override
     public Double costoFijo() {
         Double costoBase = 3000.0;
-        Double costoTotal = 0.0;
-        if(nivelComplejidad == NivelComplejidad.media){
-            costoTotal = costoBase + 1500.0;
-            return costoTotal;
-
+        if (nivelComplejidad == NivelComplejidad.media) {
+            return costoBase + 1500.0;
         } else if (nivelComplejidad == NivelComplejidad.alta) {
-            costoTotal = costoBase + 3000.0;
-            return costoTotal;
+            return costoBase + 3000.0;
         } else {
             return costoBase;
-
         }
     }
 
@@ -85,5 +82,10 @@ public class Cirujia extends  Tratamiento{
     @Override
     public String getDatoExtra2() {
         return nivelComplejidad.name();
+    }
+
+    @Override
+    public String getDescripcionExtra() {
+        return "Tipo cirujia: " + tipoCirujia + "\nComplejidad: " + nivelComplejidad;
     }
 }

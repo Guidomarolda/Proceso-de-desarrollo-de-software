@@ -1,10 +1,10 @@
-package Veterinaria;
+package Veterinaria.modelo;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.LinkedHashMap;
 import java.util.UUID;
 
 public class Dueño {
@@ -98,13 +98,22 @@ public class Dueño {
         }
     }
 
-    /** Experto: cada dueño conoce las mascotas de su resumen. */
+    /** Experto: cada dueno conoce las mascotas de su resumen. */
     public Map<Mascota, Integer> obtenerResumenTratamientos() {
         Map<Mascota, Integer> resumen = new LinkedHashMap<>();
         for (Mascota mascota : mascotas) {
             resumen.put(mascota, mascota.cantidadTratamientos());
         }
         return Collections.unmodifiableMap(resumen);
+    }
+
+    public String obtenerDetalle() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Nombre: ").append(getNombreCompleto()).append("\n");
+        builder.append("Telefono: ").append(telefono).append("\n");
+        builder.append("Correo: ").append(correo).append("\n");
+        builder.append("Mascotas registradas: ").append(mascotas.size()).append("\n");
+        return builder.toString();
     }
 
     public List<Mascota> getMascotas() {

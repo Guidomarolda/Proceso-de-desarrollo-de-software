@@ -1,9 +1,9 @@
 package Veterinaria.servicios;
 
-import Veterinaria.Dueño;
-import Veterinaria.Mascota;
-import Veterinaria.NivelCuidado;
-import Veterinaria.Tipo;
+import Veterinaria.modelo.Dueño;
+import Veterinaria.modelo.Mascota;
+import Veterinaria.modelo.NivelCuidado;
+import Veterinaria.modelo.Tipo;
 import java.util.List;
 
 public interface MascotaService {

@@ -1,16 +1,15 @@
 package Veterinaria.controladores;
 
-import Veterinaria.Dueño;
-import Veterinaria.Mascota;
-import Veterinaria.NivelCuidado;
-import Veterinaria.Tipo;
+import Veterinaria.modelo.Dueño;
+import Veterinaria.modelo.Mascota;
+import Veterinaria.modelo.NivelCuidado;
+import Veterinaria.modelo.Tipo;
 import Veterinaria.servicios.MascotaService;
 
 import java.util.List;
 
 /**
- * Controlador GRASP especializado en las solicitudes y operaciones sobre Mascotas.
- * Delega el registro y la asociacion al servicio de aplicacion.
+ * Controlador MVC/GRASP especializado en las solicitudes y operaciones sobre Mascotas.
  */
 public class MascotaController {
     private final MascotaService service;
@@ -50,5 +49,17 @@ public class MascotaController {
         return service.buscarMascotaPorId(id);
     }
 
+    public String obtenerDetalle(Mascota mascota) {
+        if (mascota == null) {
+            return "";
+        }
+        return mascota.obtenerDetalle();
+    }
 
+    public boolean verificarAptitud(Mascota mascota) {
+        if (mascota == null) {
+            throw new IllegalArgumentException("Debe seleccionar una mascota de la lista.");
+        }
+        return mascota.esAptaParaProcedimientoEspecial();
+    }
 }

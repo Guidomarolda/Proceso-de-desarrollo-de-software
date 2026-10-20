@@ -1,15 +1,17 @@
 package Veterinaria.controladores;
 
-import Veterinaria.Estado;
-import Veterinaria.Mascota;
-import Veterinaria.NivelComplejidad;
-import Veterinaria.Tratamiento;
+import Veterinaria.modelo.Estado;
+import Veterinaria.modelo.Mascota;
+import Veterinaria.modelo.NivelComplejidad;
+import Veterinaria.modelo.Tratamiento;
+import Veterinaria.modelo.TratamientoFactory;
 import Veterinaria.servicios.TratamientoService;
 
 import java.util.List;
 
 /**
- * Controlador GRASP especializado en solicitudes y ciclo de vida de Tratamientos.
+ * Controlador MVC/GRASP especializado en solicitudes y ciclo de vida de Tratamientos,
+ * incluyendo Planes Compuestos (Composite) y Adicionales Dinamicos (Decorator).
  */
 public class TratamientoController {
     private final TratamientoService service;
@@ -33,6 +35,19 @@ public class TratamientoController {
         return service.registrarCirujia(mascotaId, nombre, fechaInicio, estado, tipoCirujia, nivelComplejidad);
     }
 
+    public Tratamiento registrarPlanCompuesto(String mascotaId, String nombre, String fechaInicio, Estado estado, List<Tratamiento> subTratamientos) {
+        if (subTratamientos == null || subTratamientos.isEmpty()) {
+            throw new IllegalArgumentException("Debe seleccionar al menos un sub-tratamiento para conformar el Plan Compuesto.");
+        }
+        return service.registrarPlanCompuesto(mascotaId, nombre, fechaInicio, estado, subTratamientos);
+    }
+
+    public Tratamiento registrarTratamientoDecorado(String mascotaId, Tratamiento base,
+                                                    boolean urgenciaGuardia, boolean medicacionEspecial, int diasInternacion) {
+        Tratamiento decorado = TratamientoFactory.decorarTratamiento(base, urgenciaGuardia, medicacionEspecial, diasInternacion);
+        return service.registrarTratamientoPersonalizado(mascotaId, decorado);
+    }
+
     public List<Mascota> getMascotas() {
         return service.getMascotas();
     }
@@ -41,4 +56,10 @@ public class TratamientoController {
         return service.getTratamientos();
     }
 
+    public String obtenerDetalle(Tratamiento tratamiento) {
+        if (tratamiento == null) {
+            return "";
+        }
+        return tratamiento.obtenerDetalle();
+    }
 }

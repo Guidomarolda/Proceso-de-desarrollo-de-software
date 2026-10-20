@@ -1,8 +1,8 @@
 package Veterinaria.servicios;
 
-import Veterinaria.Dueño;
-import Veterinaria.Mascota;
-import Veterinaria.Tratamiento;
+import Veterinaria.modelo.Dueño;
+import Veterinaria.modelo.Mascota;
+import Veterinaria.modelo.Tratamiento;
 import java.util.List;
 import java.util.Map;
 

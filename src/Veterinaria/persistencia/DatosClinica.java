@@ -1,6 +1,6 @@
 package Veterinaria.persistencia;
 
-import Veterinaria.Dueño;
+import Veterinaria.modelo.Dueño;
 
 import java.util.ArrayList;
 import java.util.Collections;

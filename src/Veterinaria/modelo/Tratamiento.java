@@ -1,7 +1,11 @@
-package Veterinaria;
+package Veterinaria.modelo;
 
 import java.util.UUID;
 
+/**
+ * Componente base abstracto para los tratamientos veterinarios.
+ * Actua como Component en los patrones Composite y Decorator.
+ */
 public abstract class Tratamiento {
     private String id;
     private String nombreTratamiento;
@@ -55,12 +59,36 @@ public abstract class Tratamiento {
     }
 
     public abstract Double costoFijo();
-    //de tipo boolean debido a que es un aviso simplemente con 2 respuestas posibles
+
     public abstract Boolean requiereAtencionUrgente();
 
     public abstract String getTipoRegistro();
+
     public abstract String getDatoExtra1();
+
     public abstract String getDatoExtra2();
+
+    /**
+     * Devuelve la informacion especifica del tratamiento sin requerir instanceof en la Vista.
+     */
+    public abstract String getDescripcionExtra();
+
+    /**
+     * Construye el resumen completo del tratamiento de manera polimorfica.
+     */
+    public String obtenerDetalle() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Nombre: ").append(getNombreTratamiento()).append("\n");
+        builder.append("Fecha inicio: ").append(getFechaInicio()).append("\n");
+        builder.append("Estado: ").append(getEstado()).append("\n");
+        builder.append("Costo: ").append(costoFijo()).append("\n");
+        builder.append("Requiere seguimiento: ").append(requiereAtencionUrgente() ? "Si" : "No").append("\n");
+        String extra = getDescripcionExtra();
+        if (extra != null && !extra.isEmpty()) {
+            builder.append(extra).append("\n");
+        }
+        return builder.toString();
+    }
 
     protected String validarTexto(String valor, String campo) {
         if (valor == null || valor.trim().isEmpty()) {
@@ -71,6 +99,6 @@ public abstract class Tratamiento {
 
     @Override
     public String toString() {
-        return nombreTratamiento + " (" + getClass().getSimpleName() + " - " + estado + ")";
+        return getNombreTratamiento() + " (" + getClass().getSimpleName() + " - " + getEstado() + ")";
     }
 }

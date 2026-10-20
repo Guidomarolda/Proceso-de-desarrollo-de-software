@@ -1,8 +1,9 @@
 package Veterinaria.gui;
 
-import Veterinaria.Dueño;
-import Veterinaria.Mascota;
-import Veterinaria.Tratamiento;
+import Veterinaria.controladores.ConsultaController;
+import Veterinaria.modelo.Dueño;
+import Veterinaria.modelo.Mascota;
+import Veterinaria.modelo.Tratamiento;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -16,8 +17,6 @@ import javax.swing.JTextArea;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.util.Map;
-
-import Veterinaria.controladores.ConsultaController;
 
 public class ConsultasPanel extends JPanel implements RefreshablePanel {
     private final ConsultaController controller;

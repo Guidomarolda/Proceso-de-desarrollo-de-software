@@ -1,4 +1,4 @@
-package Veterinaria;
+package Veterinaria.modelo;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Long Parameter List actualizado 
+ * Clase abstracta base del Modelo para todas las mascotas.
+ * Define el contrato polimorfico (Liskov) y la informacion de detalle sin exponer subtipos a la Vista.
  */
 public abstract class Mascota implements Comparable<Mascota> {
     private String id;
@@ -119,6 +120,26 @@ public abstract class Mascota implements Comparable<Mascota> {
 
     public abstract String getDatoExtra();
 
+    /**
+     * Devuelve la descripcion legible del atributo especifico de la subclase (sin necesidad de instanceof en la Vista).
+     */
+    public abstract String getDescripcionExtra();
+
+    /**
+     * Construye el resumen detallado de la mascota de forma polimorfica.
+     */
+    public String obtenerDetalle() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Nombre: ").append(nombre).append("\n");
+        builder.append("Edad: ").append(edad).append("\n");
+        builder.append("Peso: ").append(peso).append("\n");
+        builder.append("Costo base: ").append(costoBaseAtencion()).append("\n");
+        builder.append("Apta especial: ").append(esAptaParaProcedimientoEspecial() ? "Si" : "No").append("\n");
+        builder.append("Tratamientos: ").append(cantidadTratamientos()).append("\n");
+        builder.append(getDescripcionExtra()).append("\n");
+        return builder.toString();
+    }
+
     public Boolean esAptaParaProcedimientoEspecial() {
         return edad < 10 && peso < 30;
     }
@@ -139,5 +160,4 @@ public abstract class Mascota implements Comparable<Mascota> {
     public String toString() {
         return nombre + " (" + getClass().getSimpleName() + ")";
     }
-
 }

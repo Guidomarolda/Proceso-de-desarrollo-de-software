@@ -1,6 +1,8 @@
-package Veterinaria;
+package Veterinaria.modelo;
 
-public class TratamientoCurativo extends Tratamiento{
+import java.util.UUID;
+
+public class TratamientoCurativo extends Tratamiento {
     private String diagnostico;
     private Integer duracion;
 
@@ -15,7 +17,7 @@ public class TratamientoCurativo extends Tratamiento{
     }
 
     public TratamientoCurativo(String nombreTratamiento, String fechaInicio, Estado estado, Integer duracion, String diagnostico) {
-        this(java.util.UUID.randomUUID().toString(), nombreTratamiento, fechaInicio, estado, duracion, diagnostico);
+        this(UUID.randomUUID().toString(), nombreTratamiento, fechaInicio, estado, duracion, diagnostico);
     }
 
     public String getDiagnostico() {
@@ -39,17 +41,13 @@ public class TratamientoCurativo extends Tratamiento{
 
     @Override
     public Double costoFijo() {
-        Double costoFijo = 1000.0 + this.duracion *50.0;
+        Double costoFijo = 1000.0 + this.duracion * 50.0;
         return costoFijo;
     }
 
     @Override
     public Boolean requiereAtencionUrgente() {
-        if(this.duracion>30){
-            return true;
-        } else {
-            return false;
-        }
+        return this.duracion > 30;
     }
 
     @Override
@@ -65,5 +63,10 @@ public class TratamientoCurativo extends Tratamiento{
     @Override
     public String getDatoExtra2() {
         return diagnostico;
+    }
+
+    @Override
+    public String getDescripcionExtra() {
+        return "Duracion: " + duracion + " dias\nDiagnostico: " + diagnostico;
     }
 }

@@ -1,6 +1,8 @@
-package Veterinaria;
+package Veterinaria.modelo;
 
-public class TratamientoPreventivo extends  Tratamiento{
+import java.util.UUID;
+
+public class TratamientoPreventivo extends Tratamiento {
     private Integer frecuenciaRecomendada;
 
     public TratamientoPreventivo(String nombreTratamiento, int fechaInicio, Estado estado, Integer frecuenciaRecomendada) {
@@ -13,7 +15,7 @@ public class TratamientoPreventivo extends  Tratamiento{
     }
 
     public TratamientoPreventivo(String nombreTratamiento, String fechaInicio, Estado estado, Integer frecuenciaRecomendada) {
-        this(java.util.UUID.randomUUID().toString(), nombreTratamiento, fechaInicio, estado, frecuenciaRecomendada);
+        this(UUID.randomUUID().toString(), nombreTratamiento, fechaInicio, estado, frecuenciaRecomendada);
     }
 
     public Integer getFrecuenciaRecomendada() {
@@ -30,16 +32,12 @@ public class TratamientoPreventivo extends  Tratamiento{
     @Override
     public Double costoFijo() {
         Double costoFijo = 600.0;
-        return  costoFijo;
+        return costoFijo;
     }
 
     @Override
     public Boolean requiereAtencionUrgente() {
-        if(this.frecuenciaRecomendada<3){
-            return true;
-        } else {
-            return false;
-        }
+        return this.frecuenciaRecomendada < 3;
     }
 
     @Override
@@ -55,5 +53,10 @@ public class TratamientoPreventivo extends  Tratamiento{
     @Override
     public String getDatoExtra2() {
         return "";
+    }
+
+    @Override
+    public String getDescripcionExtra() {
+        return "Frecuencia: " + frecuenciaRecomendada + " meses";
     }
 }

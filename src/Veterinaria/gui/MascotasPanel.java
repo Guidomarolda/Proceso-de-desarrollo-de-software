@@ -1,16 +1,15 @@
 package Veterinaria.gui;
 
 /**
- * Panel de presentacion para registro, visualizacion y comparacion de mascotas.
+ * Panel de presentacion (Vista MVC) para registro, visualizacion y comparacion de mascotas.
+ * Se comunica exclusivamente con los controladores sin conocer las subclases concretas de Mascota.
  */
-import Veterinaria.Ave;
-import Veterinaria.Dueño;
-import Veterinaria.Exoticos;
-import Veterinaria.Gato;
-import Veterinaria.Mascota;
-import Veterinaria.NivelCuidado;
-import Veterinaria.Perro;
-import Veterinaria.Tipo;
+import Veterinaria.controladores.ConsultaController;
+import Veterinaria.controladores.MascotaController;
+import Veterinaria.modelo.Dueño;
+import Veterinaria.modelo.Mascota;
+import Veterinaria.modelo.NivelCuidado;
+import Veterinaria.modelo.Tipo;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -27,9 +26,6 @@ import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-
-import Veterinaria.controladores.MascotaController;
-import Veterinaria.controladores.ConsultaController;
 
 public class MascotasPanel extends JPanel implements RefreshablePanel {
     private final MascotaController mascotaController;
@@ -204,22 +200,7 @@ public class MascotasPanel extends JPanel implements RefreshablePanel {
     }
 
     private void mostrarDetalle(Mascota mascota) {
-        if (mascota == null) {
-            detalle.setText("");
-            return;
-        }
-        StringBuilder builder = new StringBuilder();
-        builder.append("Nombre: ").append(mascota.getNombre()).append("\n");
-        builder.append("Edad: ").append(mascota.getEdad()).append("\n");
-        builder.append("Peso: ").append(mascota.getPeso()).append("\n");
-        builder.append("Costo base: ").append(mascota.costoBaseAtencion()).append("\n");
-        builder.append("Apta especial: ").append(mascota.esAptaParaProcedimientoEspecial() ? "Si" : "No").append("\n");
-        builder.append("Tratamientos: ").append(mascota.cantidadTratamientos()).append("\n");
-        if (mascota instanceof Perro) builder.append("Raza: ").append(((Perro) mascota).getRaza()).append("\n");
-        if (mascota instanceof Gato) builder.append("Vacunado: ").append(((Gato) mascota).getEstaVacunado()).append("\n");
-        if (mascota instanceof Ave) builder.append("Tipo: ").append(((Ave) mascota).getTipo()).append("\n");
-        if (mascota instanceof Exoticos) builder.append("Nivel cuidado: ").append(((Exoticos) mascota).getNivelCuidado()).append("\n");
-        detalle.setText(builder.toString());
+        detalle.setText(mascotaController.obtenerDetalle(mascota));
     }
 
     private void compararMascotas() {
@@ -236,13 +217,14 @@ public class MascotasPanel extends JPanel implements RefreshablePanel {
     }
 
     private void verificarAptitud() {
-        Mascota mascota = mascotasList.getSelectedValue();
-        if (mascota == null) {
-            MainFrame.mostrarError(new IllegalArgumentException("Debe seleccionar una mascota de la lista."));
-            return;
+        try {
+            Mascota mascota = mascotasList.getSelectedValue();
+            boolean apta = mascotaController.verificarAptitud(mascota);
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    apta ? "La mascota es apta." : "La mascota no es apta.");
+        } catch (Exception e) {
+            MainFrame.mostrarError(e);
         }
-        javax.swing.JOptionPane.showMessageDialog(this,
-                mascota.esAptaParaProcedimientoEspecial() ? "La mascota es apta." : "La mascota no es apta.");
     }
 
     @Override

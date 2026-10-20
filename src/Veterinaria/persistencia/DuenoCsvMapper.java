@@ -1,9 +1,9 @@
 package Veterinaria.persistencia;
 
-import Veterinaria.Dueño;
+import Veterinaria.modelo.Dueño;
 import java.util.List;
 
-/** Conversion CSV de los datos del dueño. */
+/** Conversion CSV de los datos del dueno. */
 final class DuenoCsvMapper {
     Dueño desdeCampos(List<String> campos) {
         return new Dueño(campos.get(0), campos.get(1), campos.get(2), campos.get(3), campos.get(4));

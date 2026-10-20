@@ -1,8 +1,8 @@
-package Veterinaria;
+package Veterinaria.modelo;
 
 import java.util.UUID;
 
-public class Gato extends  Mascota {
+public class Gato extends Mascota {
     private Boolean estaVacunado;
 
     public Gato(Tratamiento tratamiento, Double peso, int edad, String nombre, Boolean estaVacunado) {
@@ -31,12 +31,12 @@ public class Gato extends  Mascota {
 
     @Override
     public Double costoBaseAtencion() {
-        Double costoBase= 0.0;
-        if(this.estaVacunado == true){
-            costoBase = 400.0 + getEdad()*30.0;
-            return  costoBase;
-        } else { //se cobra mas por no estar vacunado
-            costoBase = (400.0 + getEdad()*30.0) +200.0;
+        Double costoBase = 0.0;
+        if (this.estaVacunado == true) {
+            costoBase = 400.0 + getEdad() * 30.0;
+            return costoBase;
+        } else {
+            costoBase = (400.0 + getEdad() * 30.0) + 200.0;
             return costoBase;
         }
     }
@@ -50,5 +50,9 @@ public class Gato extends  Mascota {
     public String getDatoExtra() {
         return String.valueOf(estaVacunado);
     }
-}
 
+    @Override
+    public String getDescripcionExtra() {
+        return "Vacunado: " + estaVacunado;
+    }
+}

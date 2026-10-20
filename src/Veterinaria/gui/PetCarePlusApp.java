@@ -1,17 +1,14 @@
 package Veterinaria.gui;
 
-import Veterinaria.ClinicaVeterinaria;
-import Veterinaria.controladores.DuenoController;
-import Veterinaria.controladores.MascotaController;
-import Veterinaria.controladores.TratamientoController;
-import Veterinaria.controladores.ConsultaController;
-import Veterinaria.servicios.ConsultaVeterinariaService;
-import Veterinaria.persistencia.ArchivoClinicaRepository;
-import Veterinaria.servicios.ClinicaVeterinariaService;
+import Veterinaria.facade.ClinicaVeterinariaFacade;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+/**
+ * Punto de arranque de la interfaz grafica que utiliza ClinicaVeterinariaFacade
+ * para desacoplar el inicio de la aplicacion de la configuracion de los subsistemas internos.
+ */
 public class PetCarePlusApp {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -20,14 +17,10 @@ public class PetCarePlusApp {
             } catch (Exception ignored) {
             }
 
-            ClinicaVeterinaria clinica = new ClinicaVeterinaria();
-            ClinicaVeterinariaService service =
-                    new ClinicaVeterinariaService(new ArchivoClinicaRepository(), clinica);
-            service.cargarDatos();
-            ConsultaController consultas =
-                    new ConsultaController(new ConsultaVeterinariaService(clinica));
-            MainFrame frame = new MainFrame(new DuenoController(service),
-                    new MascotaController(service), new TratamientoController(service), consultas);
+            ClinicaVeterinariaFacade facade = new ClinicaVeterinariaFacade();
+            facade.inicializarSistema();
+
+            MainFrame frame = new MainFrame(facade);
             frame.setVisible(true);
         });
     }

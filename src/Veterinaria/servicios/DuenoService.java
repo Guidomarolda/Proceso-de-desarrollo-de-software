@@ -1,6 +1,6 @@
 package Veterinaria.servicios;
 
-import Veterinaria.Dueño;
+import Veterinaria.modelo.Dueño;
 import java.util.List;
 
 public interface DuenoService {

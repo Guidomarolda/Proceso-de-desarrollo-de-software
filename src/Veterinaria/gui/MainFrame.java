@@ -1,9 +1,10 @@
 package Veterinaria.gui;
 
+import Veterinaria.controladores.ConsultaController;
 import Veterinaria.controladores.DuenoController;
 import Veterinaria.controladores.MascotaController;
 import Veterinaria.controladores.TratamientoController;
-import Veterinaria.controladores.ConsultaController;
+import Veterinaria.facade.ClinicaVeterinariaFacade;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -15,12 +16,19 @@ import java.util.List;
 public class MainFrame extends JFrame {
     private final List<RefreshablePanel> panels;
 
+    public MainFrame(ClinicaVeterinariaFacade facade) {
+        this(facade.getDuenoController(),
+             facade.getMascotaController(),
+             facade.getTratamientoController(),
+             facade.getConsultaController());
+    }
+
     public MainFrame(DuenoController duenoController, MascotaController mascotaController,
                      TratamientoController tratamientoController, ConsultaController consultaController) {
         super("PetCare Plus");
         this.panels = new ArrayList<>();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(980, 680);
+        setSize(1020, 720);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 

@@ -1,6 +1,7 @@
 package Veterinaria.gui;
 
-import Veterinaria.Dueño;
+import Veterinaria.controladores.DuenoController;
+import Veterinaria.modelo.Dueño;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -14,8 +15,6 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-
-import Veterinaria.controladores.DuenoController;
 
 public class DuenosPanel extends JPanel implements RefreshablePanel {
     private final DuenoController duenoController;
@@ -92,16 +91,7 @@ public class DuenosPanel extends JPanel implements RefreshablePanel {
     }
 
     private void mostrarDetalle(Dueño dueno) {
-        if (dueno == null) {
-            detalle.setText("");
-            return;
-        }
-        StringBuilder builder = new StringBuilder();
-        builder.append("Nombre: ").append(dueno.getNombreCompleto()).append("\n");
-        builder.append("Telefono: ").append(dueno.getTelefono()).append("\n");
-        builder.append("Correo: ").append(dueno.getCorreo()).append("\n");
-        builder.append("Mascotas registradas: ").append(dueno.getMascotas().size()).append("\n");
-        detalle.setText(builder.toString());
+        detalle.setText(duenoController.obtenerDetalle(dueno));
     }
 
     @Override
