@@ -85,13 +85,15 @@ public class TratamientosPanel extends JPanel implements RefreshablePanel {
         UiTheme.estilizarLista(subTratamientosList);
         this.subTratamientosList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-        this.urgenciaCheck = new JCheckBox("Guardia Urgencia (+$800)");
+        this.urgenciaCheck = new JCheckBox("Guardia (+$800)");
         UiTheme.estilizarCheck(urgenciaCheck);
-        this.medicacionCheck = new JCheckBox("Medicacion Especial (+$500)");
+        this.medicacionCheck = new JCheckBox("Medicacion (+$500)");
         UiTheme.estilizarCheck(medicacionCheck);
         this.internacionCheck = new JCheckBox("Internacion ($400/dia) - Dias:");
         UiTheme.estilizarCheck(internacionCheck);
-        this.diasInternacionField = UiTheme.crearCampoTexto(10);
+        this.diasInternacionField = UiTheme.crearCampoTexto(5);
+        this.diasInternacionField.setMinimumSize(new Dimension(60, 32));
+        this.diasInternacionField.setPreferredSize(new Dimension(70, 32));
 
         this.extrasLayout = new CardLayout();
         this.extrasPanel = new JPanel(extrasLayout);
@@ -276,17 +278,28 @@ public class TratamientosPanel extends JPanel implements RefreshablePanel {
     }
 
     private JPanel panelDecoradores() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 4));
+        JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(UiTheme.BG_DETAIL);
         panel.setBorder(javax.swing.BorderFactory.createCompoundBorder(
                 javax.swing.BorderFactory.createLineBorder(UiTheme.BORDER_COLOR, 1),
-                javax.swing.BorderFactory.createEmptyBorder(4, 8, 4, 8)
+                javax.swing.BorderFactory.createEmptyBorder(6, 10, 6, 10)
         ));
-        panel.add(UiTheme.crearEtiqueta("Adicionales (Decorator):"));
-        panel.add(urgenciaCheck);
-        panel.add(medicacionCheck);
-        panel.add(internacionCheck);
-        panel.add(diasInternacionField);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(0, 6, 0, 6);
+        gbc.gridy = 0;
+
+        gbc.gridx = 0;
+        panel.add(UiTheme.crearEtiqueta("Adicionales (Decorator):"), gbc);
+        gbc.gridx = 1;
+        panel.add(urgenciaCheck, gbc);
+        gbc.gridx = 2;
+        panel.add(medicacionCheck, gbc);
+        gbc.gridx = 3;
+        panel.add(internacionCheck, gbc);
+        gbc.gridx = 4;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(diasInternacionField, gbc);
         return panel;
     }
 
