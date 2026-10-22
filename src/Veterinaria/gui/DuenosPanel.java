@@ -79,7 +79,7 @@ public class DuenosPanel extends JPanel implements RefreshablePanel {
 
     private JSplitPane panelCentral() {
         JPanel listaPanel = new JPanel(new BorderLayout());
-        UiTheme.aplicarFondoTarjeta(listaPanel, "Duenos Registrados (seleccione uno para ver su detalle)");
+        UiTheme.aplicarFondoTarjeta(listaPanel, "Duenos Registrados");
         listaPanel.add(new JScrollPane(lista), BorderLayout.CENTER);
 
         JPanel detallePanel = new JPanel(new BorderLayout());

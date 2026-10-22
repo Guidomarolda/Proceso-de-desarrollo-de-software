@@ -191,7 +191,7 @@ public class MascotasPanel extends JPanel implements RefreshablePanel {
 
     private JSplitPane panelCentral() {
         JPanel listaPanel = new JPanel(new BorderLayout());
-        UiTheme.aplicarFondoTarjeta(listaPanel, "Mascotas Registradas (seleccione una para ver su ficha)");
+        UiTheme.aplicarFondoTarjeta(listaPanel, "Mascotas Registradas");
         listaPanel.add(new JScrollPane(mascotasList), BorderLayout.CENTER);
 
         JPanel detallePanel = new JPanel(new BorderLayout(12, 8));
@@ -360,8 +360,8 @@ public class MascotasPanel extends JPanel implements RefreshablePanel {
     private void mostrarDetalle(Mascota mascota) {
         if (mascota == null) {
             detalle.setText("Seleccione una mascota de la lista izquierda para visualizar su ficha.");
-            fotoLabel.setIcon(null);
-            fotoLabel.setText("Sin foto");
+            fotoLabel.setText("");
+            fotoLabel.setIcon(PetCareLogo.crearAvatarMascota("MASCOTA", FOTO_SIZE - 6));
             return;
         }
         detalle.setText(mascotaController.obtenerDetalle(mascota));
@@ -384,8 +384,8 @@ public class MascotasPanel extends JPanel implements RefreshablePanel {
             } catch (Exception ignored) {
             }
         }
-        fotoLabel.setIcon(null);
-        fotoLabel.setText("<html><center>Sin foto<br><small>(" + mascota.getTipoRegistro() + ")</small></center></html>");
+        fotoLabel.setText("");
+        fotoLabel.setIcon(PetCareLogo.crearAvatarMascota(mascota.getTipoRegistro(), FOTO_SIZE - 6));
     }
 
     private void compararMascotas() {

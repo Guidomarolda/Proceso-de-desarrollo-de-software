@@ -21,11 +21,14 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -70,6 +73,7 @@ public class TratamientosPanel extends JPanel implements RefreshablePanel {
 
         this.nombreField = UiTheme.crearCampoTexto(22);
         this.fechaField = UiTheme.crearCampoTexto(16);
+        this.fechaField.setText(fechaHoy());
         this.estadoCombo = new JComboBox<>(Estado.values());
         UiTheme.estilizarCombo(estadoCombo);
 
@@ -94,6 +98,9 @@ public class TratamientosPanel extends JPanel implements RefreshablePanel {
         this.diasInternacionField = UiTheme.crearCampoTexto(5);
         this.diasInternacionField.setMinimumSize(new Dimension(60, 32));
         this.diasInternacionField.setPreferredSize(new Dimension(70, 32));
+        this.diasInternacionField.setEnabled(false);
+        this.diasInternacionField.setBackground(new Color(242, 240, 228));
+        this.internacionCheck.addActionListener(e -> actualizarEstadoInternacion());
 
         this.extrasLayout = new CardLayout();
         this.extrasPanel = new JPanel(extrasLayout);
@@ -182,7 +189,7 @@ public class TratamientosPanel extends JPanel implements RefreshablePanel {
 
     private JSplitPane panelCentral() {
         JPanel listaPanel = new JPanel(new BorderLayout());
-        UiTheme.aplicarFondoTarjeta(listaPanel, "Tratamientos Registrados (seleccione uno para ver su detalle)");
+        UiTheme.aplicarFondoTarjeta(listaPanel, "Tratamientos Registrados");
         listaPanel.add(new JScrollPane(tratamientosList), BorderLayout.CENTER);
 
         JPanel detallePanel = new JPanel(new BorderLayout());
@@ -379,7 +386,7 @@ public class TratamientosPanel extends JPanel implements RefreshablePanel {
 
     private void limpiar() {
         nombreField.setText("");
-        fechaField.setText("");
+        fechaField.setText(fechaHoy());
         frecuenciaField.setText("");
         duracionField.setText("");
         diagnosticoField.setText("");
@@ -387,8 +394,23 @@ public class TratamientosPanel extends JPanel implements RefreshablePanel {
         urgenciaCheck.setSelected(false);
         medicacionCheck.setSelected(false);
         internacionCheck.setSelected(false);
-        diasInternacionField.setText("");
+        actualizarEstadoInternacion();
         subTratamientosList.clearSelection();
+    }
+
+    private void actualizarEstadoInternacion() {
+        boolean activo = internacionCheck.isSelected();
+        diasInternacionField.setEnabled(activo);
+        diasInternacionField.setBackground(activo ? Color.WHITE : new Color(242, 240, 228));
+        if (activo && diasInternacionField.getText().trim().isEmpty()) {
+            diasInternacionField.setText("1");
+        } else if (!activo) {
+            diasInternacionField.setText("");
+        }
+    }
+
+    private static String fechaHoy() {
+        return LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
     private void mostrarDetalle(Tratamiento tratamiento) {

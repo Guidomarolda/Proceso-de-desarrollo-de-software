@@ -64,8 +64,8 @@ public final class UiTheme {
         combo.setFont(FONT_REGULAR);
         combo.setForeground(TEXT_DARK);
         combo.setBackground(Color.WHITE);
-        combo.setMinimumSize(new Dimension(130, 34));
-        combo.setPreferredSize(new Dimension(180, 34));
+        combo.setMinimumSize(new Dimension(160, 34));
+        combo.setPreferredSize(new Dimension(230, 34));
     }
 
     public static JLabel crearEtiqueta(String texto) {

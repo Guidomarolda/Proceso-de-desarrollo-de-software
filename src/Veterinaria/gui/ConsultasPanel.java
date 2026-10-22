@@ -25,7 +25,7 @@ public class ConsultasPanel extends JPanel implements RefreshablePanel {
     private final JComboBox<Tratamiento> tratamientoCostoCombo;
     private final JComboBox<Dueño> duenoResumenCombo;
     private final JTextArea resultado;
-    private final DefaultListModel<Tratamiento> seguimientoModel;
+    private final DefaultListModel<String> seguimientoModel;
 
     public ConsultasPanel(ConsultaController controller) {
         this.controller = controller;
@@ -81,7 +81,7 @@ public class ConsultasPanel extends JPanel implements RefreshablePanel {
         UiTheme.aplicarFondoTarjeta(resultadoPanel, "Resultado de la Consulta");
         resultadoPanel.add(new JScrollPane(resultado), BorderLayout.CENTER);
 
-        JList<Tratamiento> lista = new JList<>(seguimientoModel);
+        JList<String> lista = new JList<>(seguimientoModel);
         UiTheme.estilizarLista(lista);
         JPanel seguimientoPanel = new JPanel(new BorderLayout());
         UiTheme.aplicarFondoTarjeta(seguimientoPanel, "Tratamientos que Requieren Seguimiento Urgente");
@@ -134,8 +134,25 @@ public class ConsultasPanel extends JPanel implements RefreshablePanel {
         cargarCombo(tratamientoCostoCombo, controller.getTratamientos());
         cargarCombo(duenoResumenCombo, controller.getDuenos());
         seguimientoModel.clear();
-        for (Tratamiento tratamiento : controller.tratamientosQueRequierenSeguimiento()) {
-            seguimientoModel.addElement(tratamiento);
+        java.util.List<Tratamiento> urgentes = controller.tratamientosQueRequierenSeguimiento();
+        if (urgentes.isEmpty()) {
+            seguimientoModel.addElement("No hay tratamientos con seguimiento urgente pendiente.");
+        } else {
+            for (Tratamiento tratamiento : urgentes) {
+                seguimientoModel.addElement(tratamiento.toString());
+            }
+        }
+        if (resultado.getText().trim().isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("=== PANEL DE CONSULTAS Y REPORTES ===\n\n");
+            sb.append("Duenos registrados:       ").append(controller.getDuenos().size()).append("\n");
+            sb.append("Mascotas registradas:     ").append(controller.getMascotas().size()).append("\n");
+            sb.append("Tratamientos registrados: ").append(controller.getTratamientos().size()).append("\n");
+            sb.append("Seguimientos urgentes:    ").append(urgentes.size()).append("\n\n");
+            sb.append("Utilice los selectores superiores para:\n");
+            sb.append(" 1. Calcular el costo total de atencion (Mascota + Tratamiento/Plan).\n");
+            sb.append(" 2. Ver el resumen de tratamientos agrupados por mascota de un dueno.\n");
+            resultado.setText(sb.toString());
         }
     }
 

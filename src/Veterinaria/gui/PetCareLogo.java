@@ -1,10 +1,12 @@
 package Veterinaria.gui;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -16,7 +18,7 @@ import java.awt.image.BufferedImage;
 
 /**
  * Componente grafico vectorial (Java2D) que renderiza el logo oficial de "PetCare Plus"
- * en la esquina superior de la interfaz y genera el icono de la ventana principal.
+ * en la esquina superior de la interfaz, el icono de la ventana y el avatar por defecto de mascotas.
  */
 public class PetCareLogo extends JPanel {
 
@@ -62,6 +64,43 @@ public class PetCareLogo extends JPanel {
         dibujarEmblema(g2, 2, 2, size - 4);
         g2.dispose();
         return img;
+    }
+
+    /**
+     * Genera un avatar ilustrado por defecto cuando una mascota no tiene fotografia cargada.
+     */
+    public static ImageIcon crearAvatarMascota(String tipoMascota, int size) {
+        BufferedImage img = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = img.createGraphics();
+        configurarCalidad(g2);
+
+        // Fondo suave redondeado
+        g2.setColor(new Color(235, 246, 248));
+        g2.fillRoundRect(0, 0, size, size, 16, 16);
+
+        // Medallon central con la huella
+        int medalSize = (int) (size * 0.56);
+        int mx = (size - medalSize) / 2;
+        int my = (int) (size * 0.12);
+        dibujarEmblema(g2, mx, my, medalSize);
+
+        // Etiqueta inferior con el tipo de mascota
+        String etiqueta = (tipoMascota == null || tipoMascota.isEmpty()) ? "MASCOTA" : tipoMascota;
+        g2.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        g2.setColor(UiTheme.PRIMARY_DARK);
+        FontMetrics fm = g2.getFontMetrics();
+        int tx = (size - fm.stringWidth(etiqueta)) / 2;
+        int ty = (int) (size * 0.84);
+        g2.drawString(etiqueta, tx, ty);
+
+        g2.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+        g2.setColor(UiTheme.TEXT_MUTED);
+        String sub = "Sin foto cargada";
+        int sx = (size - g2.getFontMetrics().stringWidth(sub)) / 2;
+        g2.drawString(sub, sx, ty + 14);
+
+        g2.dispose();
+        return new ImageIcon(img);
     }
 
     private static void configurarCalidad(Graphics2D g2) {
