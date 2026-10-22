@@ -12,16 +12,17 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -62,33 +63,50 @@ public class TratamientosPanel extends JPanel implements RefreshablePanel {
         this.onChange = onChange;
         this.mascotasModel = new DefaultComboBoxModel<>();
         this.mascotasCombo = new JComboBox<>(mascotasModel);
+        UiTheme.estilizarCombo(mascotasCombo);
+
         this.tipoCombo = new JComboBox<>(new String[]{"Preventivo", "Curativo", "Cirujia", "Plan Compuesto"});
-        this.nombreField = new JTextField(14);
-        this.fechaField = new JTextField(10);
+        UiTheme.estilizarCombo(tipoCombo);
+
+        this.nombreField = UiTheme.crearCampoTexto(22);
+        this.fechaField = UiTheme.crearCampoTexto(16);
         this.estadoCombo = new JComboBox<>(Estado.values());
-        this.frecuenciaField = new JTextField(5);
-        this.duracionField = new JTextField(5);
-        this.diagnosticoField = new JTextField(18);
-        this.tipoCirujiaField = new JTextField(14);
+        UiTheme.estilizarCombo(estadoCombo);
+
+        this.frecuenciaField = UiTheme.crearCampoTexto(14);
+        this.duracionField = UiTheme.crearCampoTexto(12);
+        this.diagnosticoField = UiTheme.crearCampoTexto(26);
+        this.tipoCirujiaField = UiTheme.crearCampoTexto(22);
         this.complejidadCombo = new JComboBox<>(NivelComplejidad.values());
+        UiTheme.estilizarCombo(complejidadCombo);
+
         this.subTratamientosModel = new DefaultListModel<>();
         this.subTratamientosList = new JList<>(subTratamientosModel);
+        UiTheme.estilizarLista(subTratamientosList);
         this.subTratamientosList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
         this.urgenciaCheck = new JCheckBox("Guardia Urgencia (+$800)");
+        UiTheme.estilizarCheck(urgenciaCheck);
         this.medicacionCheck = new JCheckBox("Medicacion Especial (+$500)");
+        UiTheme.estilizarCheck(medicacionCheck);
         this.internacionCheck = new JCheckBox("Internacion ($400/dia) - Dias:");
-        this.diasInternacionField = new JTextField(3);
+        UiTheme.estilizarCheck(internacionCheck);
+        this.diasInternacionField = UiTheme.crearCampoTexto(10);
+
         this.extrasLayout = new CardLayout();
         this.extrasPanel = new JPanel(extrasLayout);
+        this.extrasPanel.setOpaque(false);
+
         this.tratamientosModel = new DefaultListModel<>();
         this.tratamientosList = new JList<>(tratamientosModel);
-        this.detalle = new JTextArea();
+        UiTheme.estilizarLista(tratamientosList);
+        this.detalle = UiTheme.crearAreaDetalle();
 
         setLayout(new BorderLayout(12, 12));
+        UiTheme.aplicarMargenPanelPrincipal(this);
+
         add(formulario(), BorderLayout.NORTH);
-        add(new JScrollPane(tratamientosList), BorderLayout.CENTER);
-        detalle.setEditable(false);
-        add(new JScrollPane(detalle), BorderLayout.EAST);
+        add(panelCentral(), BorderLayout.CENTER);
 
         tipoCombo.addActionListener(e -> extrasLayout.show(extrasPanel, (String) tipoCombo.getSelectedItem()));
         tratamientosList.addListSelectionListener(e -> mostrarDetalle(tratamientosList.getSelectedValue()));
@@ -97,77 +115,174 @@ public class TratamientosPanel extends JPanel implements RefreshablePanel {
 
     private JPanel formulario() {
         JPanel panel = new JPanel(new GridBagLayout());
+        UiTheme.aplicarFondoTarjeta(panel, "Registrar Nuevo Tratamiento o Plan Compuesto");
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(4, 4, 4, 4);
+        gbc.insets = new Insets(6, 8, 6, 8);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        addComponente(panel, gbc, 0, 0, "Mascota", mascotasCombo);
-        addComponente(panel, gbc, 2, 0, "Tipo", tipoCombo);
-        addComponente(panel, gbc, 4, 0, "Nombre", nombreField);
-        addComponente(panel, gbc, 6, 0, "Fecha", fechaField);
-        addComponente(panel, gbc, 8, 0, "Estado", estadoCombo);
+        // Fila 0: Mascota, Tipo, Estado
+        addComponente(panel, gbc, 0, 0, "Mascota:", mascotasCombo);
+        addComponente(panel, gbc, 2, 0, "Tipo:", tipoCombo);
+        addComponente(panel, gbc, 4, 0, "Estado:", estadoCombo);
 
+        // Fila 1: Nombre del Tratamiento (ocupa 3 columnas) y Fecha de Inicio (ocupa 3 columnas)
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        gbc.weightx = 0;
+        panel.add(UiTheme.crearEtiqueta("Nombre tratamiento:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1.0;
+        panel.add(nombreField, gbc);
+
+        gbc.gridx = 3;
+        gbc.gridwidth = 1;
+        gbc.weightx = 0;
+        panel.add(UiTheme.crearEtiqueta("Fecha inicio (dd/mm/aaaa):"), gbc);
+
+        gbc.gridx = 4;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1.0;
+        panel.add(fechaField, gbc);
+
+        // Fila 2: Datos especificos del tipo ocupando todo el ancho (6 columnas)
         extrasPanel.add(extraPreventivo(), "Preventivo");
         extrasPanel.add(extraCurativo(), "Curativo");
         extrasPanel.add(extraCirujia(), "Cirujia");
         extrasPanel.add(extraPlanCompuesto(), "Plan Compuesto");
         gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 8;
+        gbc.gridy = 2;
+        gbc.gridwidth = 6;
+        gbc.weightx = 1.0;
         panel.add(extrasPanel, gbc);
 
+        // Fila 3: Decoradores
         gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 8;
+        gbc.gridy = 3;
+        gbc.gridwidth = 6;
+        gbc.weightx = 1.0;
         panel.add(panelDecoradores(), gbc);
 
-        JButton registrar = new JButton("Registrar tratamiento");
+        // Boton a la derecha abarcando las 4 filas
+        JButton registrar = UiTheme.crearBotonPrimario("Registrar Tratamiento");
         registrar.addActionListener(e -> registrarTratamiento());
-        gbc.gridx = 8;
-        gbc.gridy = 1;
-        gbc.gridwidth = 2;
-        gbc.gridheight = 2;
+        gbc.gridx = 6;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 4;
+        gbc.weightx = 0;
+        gbc.fill = GridBagConstraints.VERTICAL;
         panel.add(registrar, gbc);
         return panel;
     }
 
+    private JSplitPane panelCentral() {
+        JPanel listaPanel = new JPanel(new BorderLayout());
+        UiTheme.aplicarFondoTarjeta(listaPanel, "Tratamientos Registrados (seleccione uno para ver su detalle)");
+        listaPanel.add(new JScrollPane(tratamientosList), BorderLayout.CENTER);
+
+        JPanel detallePanel = new JPanel(new BorderLayout());
+        UiTheme.aplicarFondoTarjeta(detallePanel, "Detalle del Tratamiento / Plan / Decoradores");
+        detallePanel.add(new JScrollPane(detalle), BorderLayout.CENTER);
+
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listaPanel, detallePanel);
+        split.setResizeWeight(0.6);
+        split.setBorder(null);
+        split.setOpaque(false);
+        return split;
+    }
+
     private JPanel extraPreventivo() {
-        JPanel panel = new JPanel();
-        panel.add(new JLabel("Frecuencia meses"));
-        panel.add(frecuenciaField);
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setOpaque(false);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(2, 0, 2, 8);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        gbc.gridx = 0;
+        gbc.weightx = 0;
+        panel.add(UiTheme.crearEtiqueta("Frecuencia recomendada (meses):"), gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 1.0;
+        panel.add(frecuenciaField, gbc);
         return panel;
     }
 
     private JPanel extraCurativo() {
-        JPanel panel = new JPanel();
-        panel.add(new JLabel("Duracion dias"));
-        panel.add(duracionField);
-        panel.add(new JLabel("Diagnostico"));
-        panel.add(diagnosticoField);
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setOpaque(false);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(2, 0, 2, 8);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        gbc.gridx = 0;
+        gbc.weightx = 0;
+        panel.add(UiTheme.crearEtiqueta("Duracion (dias):"), gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 0.35;
+        panel.add(duracionField, gbc);
+
+        gbc.gridx = 2;
+        gbc.insets = new Insets(2, 12, 2, 8);
+        gbc.weightx = 0;
+        panel.add(UiTheme.crearEtiqueta("Diagnostico clinico:"), gbc);
+
+        gbc.gridx = 3;
+        gbc.insets = new Insets(2, 0, 2, 0);
+        gbc.weightx = 0.65;
+        panel.add(diagnosticoField, gbc);
         return panel;
     }
 
     private JPanel extraCirujia() {
-        JPanel panel = new JPanel();
-        panel.add(new JLabel("Tipo cirujia"));
-        panel.add(tipoCirujiaField);
-        panel.add(new JLabel("Complejidad"));
-        panel.add(complejidadCombo);
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setOpaque(false);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(2, 0, 2, 8);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        gbc.gridx = 0;
+        gbc.weightx = 0;
+        panel.add(UiTheme.crearEtiqueta("Tipo de cirujia:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 0.6;
+        panel.add(tipoCirujiaField, gbc);
+
+        gbc.gridx = 2;
+        gbc.insets = new Insets(2, 12, 2, 8);
+        gbc.weightx = 0;
+        panel.add(UiTheme.crearEtiqueta("Complejidad:"), gbc);
+
+        gbc.gridx = 3;
+        gbc.insets = new Insets(2, 0, 2, 0);
+        gbc.weightx = 0.4;
+        panel.add(complejidadCombo, gbc);
         return panel;
     }
 
     private JPanel extraPlanCompuesto() {
-        JPanel panel = new JPanel();
-        panel.add(new JLabel("Sub-tratamientos (Ctrl+Click):"));
+        JPanel panel = new JPanel(new BorderLayout(10, 0));
+        panel.setOpaque(false);
+        panel.add(UiTheme.crearEtiqueta("Sub-tratamientos (Ctrl+Click):"), BorderLayout.WEST);
         JScrollPane scroll = new JScrollPane(subTratamientosList);
-        scroll.setPreferredSize(new Dimension(320, 48));
-        panel.add(scroll);
+        scroll.setPreferredSize(new Dimension(400, 60));
+        panel.add(scroll, BorderLayout.CENTER);
         return panel;
     }
 
     private JPanel panelDecoradores() {
-        JPanel panel = new JPanel();
-        panel.add(new JLabel("Adicionales (Decorator):"));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 4));
+        panel.setBackground(UiTheme.BG_DETAIL);
+        panel.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createLineBorder(UiTheme.BORDER_COLOR, 1),
+                javax.swing.BorderFactory.createEmptyBorder(4, 8, 4, 8)
+        ));
+        panel.add(UiTheme.crearEtiqueta("Adicionales (Decorator):"));
         panel.add(urgenciaCheck);
         panel.add(medicacionCheck);
         panel.add(internacionCheck);
@@ -179,8 +294,12 @@ public class TratamientosPanel extends JPanel implements RefreshablePanel {
         gbc.gridx = x;
         gbc.gridy = y;
         gbc.gridwidth = 1;
-        panel.add(new JLabel(etiqueta), gbc);
+        gbc.gridheight = 1;
+        gbc.weightx = 0;
+        panel.add(UiTheme.crearEtiqueta(etiqueta), gbc);
+
         gbc.gridx = x + 1;
+        gbc.weightx = 1.0;
         panel.add(componente, gbc);
     }
 
@@ -196,32 +315,33 @@ public class TratamientosPanel extends JPanel implements RefreshablePanel {
             boolean conMedicacion = medicacionCheck.isSelected();
             int diasInternacion = 0;
             if (internacionCheck.isSelected()) {
-                diasInternacion = Integer.parseInt(diasInternacionField.getText());
+                diasInternacion = Integer.parseInt(diasInternacionField.getText().trim());
             }
             boolean tieneDecoradores = conUrgencia || conMedicacion || diasInternacion > 0;
+            Tratamiento creado;
 
             if (!tieneDecoradores) {
                 if ("Preventivo".equals(tipo)) {
-                    tratamientoController.registrarPreventivo(mascota.getId(), nombreField.getText(), fechaField.getText(), estado,
-                            Integer.parseInt(frecuenciaField.getText()));
+                    creado = tratamientoController.registrarPreventivo(mascota.getId(), nombreField.getText(), fechaField.getText(), estado,
+                            Integer.parseInt(frecuenciaField.getText().trim()));
                 } else if ("Curativo".equals(tipo)) {
-                    tratamientoController.registrarCurativo(mascota.getId(), nombreField.getText(), fechaField.getText(), estado,
-                            Integer.parseInt(duracionField.getText()), diagnosticoField.getText());
+                    creado = tratamientoController.registrarCurativo(mascota.getId(), nombreField.getText(), fechaField.getText(), estado,
+                            Integer.parseInt(duracionField.getText().trim()), diagnosticoField.getText());
                 } else if ("Cirujia".equals(tipo)) {
-                    tratamientoController.registrarCirujia(mascota.getId(), nombreField.getText(), fechaField.getText(), estado,
+                    creado = tratamientoController.registrarCirujia(mascota.getId(), nombreField.getText(), fechaField.getText(), estado,
                             tipoCirujiaField.getText(), (NivelComplejidad) complejidadCombo.getSelectedItem());
                 } else {
                     List<Tratamiento> seleccionados = subTratamientosList.getSelectedValuesList();
-                    tratamientoController.registrarPlanCompuesto(mascota.getId(), nombreField.getText(), fechaField.getText(), estado, seleccionados);
+                    creado = tratamientoController.registrarPlanCompuesto(mascota.getId(), nombreField.getText(), fechaField.getText(), estado, seleccionados);
                 }
             } else {
                 Tratamiento base;
                 if ("Preventivo".equals(tipo)) {
                     base = TratamientoFactory.crearPreventivo(nombreField.getText(), fechaField.getText(), estado,
-                            Integer.parseInt(frecuenciaField.getText()));
+                            Integer.parseInt(frecuenciaField.getText().trim()));
                 } else if ("Curativo".equals(tipo)) {
                     base = TratamientoFactory.crearCurativo(nombreField.getText(), fechaField.getText(), estado,
-                            Integer.parseInt(duracionField.getText()), diagnosticoField.getText());
+                            Integer.parseInt(duracionField.getText().trim()), diagnosticoField.getText());
                 } else if ("Cirujia".equals(tipo)) {
                     base = TratamientoFactory.crearCirujia(nombreField.getText(), fechaField.getText(), estado,
                             tipoCirujiaField.getText(), (NivelComplejidad) complejidadCombo.getSelectedItem());
@@ -232,10 +352,11 @@ public class TratamientosPanel extends JPanel implements RefreshablePanel {
                     }
                     base = TratamientoFactory.crearPlanCompuesto(nombreField.getText(), fechaField.getText(), estado, seleccionados);
                 }
-                tratamientoController.registrarTratamientoDecorado(mascota.getId(), base, conUrgencia, conMedicacion, diasInternacion);
+                creado = tratamientoController.registrarTratamientoDecorado(mascota.getId(), base, conUrgencia, conMedicacion, diasInternacion);
             }
             limpiar();
             onChange.run();
+            tratamientosList.setSelectedValue(creado, true);
         } catch (NumberFormatException e) {
             MainFrame.mostrarError(new IllegalArgumentException("Los campos numericos deben tener valores validos."));
         } catch (Exception e) {
@@ -258,11 +379,16 @@ public class TratamientosPanel extends JPanel implements RefreshablePanel {
     }
 
     private void mostrarDetalle(Tratamiento tratamiento) {
+        if (tratamiento == null) {
+            detalle.setText("Seleccione un tratamiento de la lista izquierda para ver su costo y detalle.");
+            return;
+        }
         detalle.setText(tratamientoController.obtenerDetalle(tratamiento));
     }
 
     @Override
     public void refreshData() {
+        Tratamiento seleccionadoPrevio = tratamientosList.getSelectedValue();
         mascotasModel.removeAllElements();
         for (Mascota mascota : tratamientoController.getMascotas()) {
             mascotasModel.addElement(mascota);
@@ -272,6 +398,13 @@ public class TratamientosPanel extends JPanel implements RefreshablePanel {
         for (Tratamiento tratamiento : tratamientoController.getTratamientos()) {
             tratamientosModel.addElement(tratamiento);
             subTratamientosModel.addElement(tratamiento);
+        }
+        if (seleccionadoPrevio != null) {
+            tratamientosList.setSelectedValue(seleccionadoPrevio, true);
+        } else if (!tratamientosModel.isEmpty()) {
+            tratamientosList.setSelectedIndex(0);
+        } else {
+            mostrarDetalle(null);
         }
     }
 }

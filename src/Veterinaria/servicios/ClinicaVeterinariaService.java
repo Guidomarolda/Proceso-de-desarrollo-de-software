@@ -60,6 +60,13 @@ public class ClinicaVeterinariaService implements DuenoService, MascotaService, 
     }
 
     @Override
+    public void actualizarImagenMascota(String mascotaId, String rutaImagen) {
+        Mascota mascota = clinica.buscarMascotaPorId(mascotaId);
+        mascota.setRutaImagen(rutaImagen);
+        guardarDatos();
+    }
+
+    @Override
     public Tratamiento registrarPreventivo(String mascotaId, String nombre, String fechaInicio, Estado estado, int frecuencia) {
         Tratamiento tratamiento = TratamientoFactory.crearPreventivo(nombre, fechaInicio, estado, frecuencia);
         agregarTratamientoAMascota(mascotaId, tratamiento);

@@ -1,2 +1,3 @@
-id;duenoId;tipo;nombre;edad;peso;extra
-d4710acc-1eed-4849-8897-27fd812fa2fe;921a371d-e6cc-4891-892a-b2a613a61411;PERRO;Jano;10;30.0;boxer
+id;duenoId;tipo;nombre;edad;peso;extra;imagen
+d4710acc-1eed-4849-8897-27fd812fa2fe;921a371d-e6cc-4891-892a-b2a613a61411;PERRO;Jano;10;30.0;boxer;
+bf5dfd86-64b0-4c79-bc09-e08eaac11167;268de1ce-bd46-4fda-a42f-41540c4277f1;PERRO;koda;4;24.0;Perro español de agua;C:\\Users\\USUARIO\\Downloads\\WhatsApp Image 2026-10-22 at 9.31.52 AM.jpeg

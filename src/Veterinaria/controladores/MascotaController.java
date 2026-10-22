@@ -37,6 +37,10 @@ public class MascotaController {
         return service.registrarExotico(duenoId, nombre, edad, peso, nivelCuidado);
     }
 
+    public void actualizarImagenMascota(String mascotaId, String rutaImagen) {
+        service.actualizarImagenMascota(mascotaId, rutaImagen);
+    }
+
     public List<Dueño> getDuenos() {
         return service.getDuenos();
     }

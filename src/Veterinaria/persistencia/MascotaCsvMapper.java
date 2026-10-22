@@ -2,16 +2,21 @@ package Veterinaria.persistencia;
 
 import Veterinaria.modelo.*;
 
-/** Traduce mascotas al formato CSV y reconstituye sus identificadores. */
+/** Traduce mascotas al formato CSV y reconstituye sus identificadores e imagen. */
 final class MascotaCsvMapper {
     Mascota desdeCampos(java.util.List<String> campos) {
-        return crearMascota(campos.get(0), campos.get(2), campos.get(3),
+        Mascota mascota = crearMascota(campos.get(0), campos.get(2), campos.get(3),
                 Integer.parseInt(campos.get(4)), Double.parseDouble(campos.get(5)), campos.get(6));
+        if (campos.size() >= 8) {
+            mascota.setRutaImagen(campos.get(7));
+        }
+        return mascota;
     }
 
     String aLinea(String duenoId, Mascota mascota) {
         return CsvUtils.linea(mascota.getId(), duenoId, mascota.getTipoRegistro(), mascota.getNombre(),
-                String.valueOf(mascota.getEdad()), String.valueOf(mascota.getPeso()), mascota.getDatoExtra());
+                String.valueOf(mascota.getEdad()), String.valueOf(mascota.getPeso()),
+                mascota.getDatoExtra(), mascota.getRutaImagen());
     }
 
     private Mascota crearMascota(String id, String tipo, String nombre, int edad, Double peso, String extra) {

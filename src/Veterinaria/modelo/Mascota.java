@@ -14,6 +14,7 @@ public abstract class Mascota implements Comparable<Mascota> {
     private String nombre;
     private int edad;
     private Double peso;
+    private String rutaImagen;
     private List<Tratamiento> tratamientos;
 
     public Mascota(Tratamiento tratamiento, Double peso, int edad, String nombre) {
@@ -26,6 +27,7 @@ public abstract class Mascota implements Comparable<Mascota> {
 
     protected Mascota(String id, Tratamiento tratamiento, Double peso, int edad, String nombre) {
         this.id = validarTexto(id, "id");
+        this.rutaImagen = "";
         this.tratamientos = new ArrayList<>();
         setPeso(peso);
         setEdad(edad);
@@ -40,6 +42,7 @@ public abstract class Mascota implements Comparable<Mascota> {
      */
     protected Mascota(MascotaBuilder builder) {
         this.id = validarTexto(builder.getId(), "id");
+        this.rutaImagen = "";
         this.tratamientos = new ArrayList<>();
         setPeso(builder.getPeso());
         setEdad(builder.getEdad());
@@ -47,6 +50,18 @@ public abstract class Mascota implements Comparable<Mascota> {
         if (builder.getTratamiento() != null) {
             agregarTratamiento(builder.getTratamiento());
         }
+    }
+
+    public String getRutaImagen() {
+        return rutaImagen == null ? "" : rutaImagen;
+    }
+
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen == null ? "" : rutaImagen.trim();
+    }
+
+    public boolean tieneImagen() {
+        return rutaImagen != null && !rutaImagen.trim().isEmpty();
     }
 
     public String getId() {

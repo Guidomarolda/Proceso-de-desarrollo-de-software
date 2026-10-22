@@ -127,7 +127,7 @@ public class ArchivoClinicaRepository implements ClinicaRepository {
 
     private void guardarMascotas(DatosClinica datos) throws IOException {
         List<String> lineas = new ArrayList<>();
-        lineas.add("id;duenoId;tipo;nombre;edad;peso;extra");
+        lineas.add("id;duenoId;tipo;nombre;edad;peso;extra;imagen");
         for (Dueño dueno : datos.getDuenos()) {
             for (Mascota mascota : dueno.getMascotas()) {
                 lineas.add(mascotaMapper.aLinea(dueno.getId(), mascota));

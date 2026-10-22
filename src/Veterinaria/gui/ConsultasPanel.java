@@ -9,12 +9,13 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.Map;
 
@@ -29,35 +30,44 @@ public class ConsultasPanel extends JPanel implements RefreshablePanel {
     public ConsultasPanel(ConsultaController controller) {
         this.controller = controller;
         this.mascotaCostoCombo = new JComboBox<>();
+        UiTheme.estilizarCombo(mascotaCostoCombo);
+
         this.tratamientoCostoCombo = new JComboBox<>();
+        UiTheme.estilizarCombo(tratamientoCostoCombo);
+
         this.duenoResumenCombo = new JComboBox<>();
-        this.resultado = new JTextArea();
+        UiTheme.estilizarCombo(duenoResumenCombo);
+
+        this.resultado = UiTheme.crearAreaDetalle();
         this.seguimientoModel = new DefaultListModel<>();
 
         setLayout(new BorderLayout(12, 12));
+        UiTheme.aplicarMargenPanelPrincipal(this);
+
         add(acciones(), BorderLayout.NORTH);
-        resultado.setEditable(false);
-        add(new JScrollPane(resultado), BorderLayout.CENTER);
-        add(seguimientos(), BorderLayout.SOUTH);
+        add(panelCentral(), BorderLayout.CENTER);
         refreshData();
     }
 
     private JPanel acciones() {
-        JPanel panel = new JPanel(new GridLayout(2, 1));
+        JPanel panel = new JPanel(new GridLayout(2, 1, 0, 8));
+        UiTheme.aplicarFondoTarjeta(panel, "Consultas de Costos y Reportes por Dueno");
 
-        JPanel costoPanel = new JPanel();
-        JButton calcularCosto = new JButton("Calcular costo total");
+        JPanel costoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 4));
+        costoPanel.setOpaque(false);
+        JButton calcularCosto = UiTheme.crearBotonPrimario("Calcular Costo Total");
         calcularCosto.addActionListener(e -> calcularCostoTotal());
-        costoPanel.add(new JLabel("Mascota"));
+        costoPanel.add(UiTheme.crearEtiqueta("Mascota:"));
         costoPanel.add(mascotaCostoCombo);
-        costoPanel.add(new JLabel("Tratamiento"));
+        costoPanel.add(UiTheme.crearEtiqueta("Tratamiento:"));
         costoPanel.add(tratamientoCostoCombo);
         costoPanel.add(calcularCosto);
 
-        JPanel resumenPanel = new JPanel();
-        JButton resumen = new JButton("Resumen tratamientos");
+        JPanel resumenPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 4));
+        resumenPanel.setOpaque(false);
+        JButton resumen = UiTheme.crearBotonSecundario("Ver Resumen de Tratamientos");
         resumen.addActionListener(e -> mostrarResumen());
-        resumenPanel.add(new JLabel("Dueno"));
+        resumenPanel.add(UiTheme.crearEtiqueta("Dueno:"));
         resumenPanel.add(duenoResumenCombo);
         resumenPanel.add(resumen);
 
@@ -66,9 +76,22 @@ public class ConsultasPanel extends JPanel implements RefreshablePanel {
         return panel;
     }
 
-    private JScrollPane seguimientos() {
+    private JSplitPane panelCentral() {
+        JPanel resultadoPanel = new JPanel(new BorderLayout());
+        UiTheme.aplicarFondoTarjeta(resultadoPanel, "Resultado de la Consulta");
+        resultadoPanel.add(new JScrollPane(resultado), BorderLayout.CENTER);
+
         JList<Tratamiento> lista = new JList<>(seguimientoModel);
-        return new JScrollPane(lista);
+        UiTheme.estilizarLista(lista);
+        JPanel seguimientoPanel = new JPanel(new BorderLayout());
+        UiTheme.aplicarFondoTarjeta(seguimientoPanel, "Tratamientos que Requieren Seguimiento Urgente");
+        seguimientoPanel.add(new JScrollPane(lista), BorderLayout.CENTER);
+
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, resultadoPanel, seguimientoPanel);
+        split.setResizeWeight(0.5);
+        split.setBorder(null);
+        split.setOpaque(false);
+        return split;
     }
 
     private void calcularCostoTotal() {
@@ -76,7 +99,13 @@ public class ConsultasPanel extends JPanel implements RefreshablePanel {
             Mascota mascota = (Mascota) mascotaCostoCombo.getSelectedItem();
             Tratamiento tratamiento = (Tratamiento) tratamientoCostoCombo.getSelectedItem();
             Double costo = controller.calcularCostoTotal(mascota, tratamiento);
-            resultado.setText("Costo total de consulta: " + costo);
+            StringBuilder sb = new StringBuilder();
+            sb.append("=== CALCULO DE COSTO TOTAL DE CONSULTA ===\n\n");
+            sb.append("Mascota: ").append(mascota.getNombre()).append(" (Costo base: $").append(mascota.costoBaseAtencion()).append(")\n");
+            sb.append("Tratamiento: ").append(tratamiento.getNombreTratamiento()).append(" (Costo: $").append(tratamiento.costoFijo()).append(")\n");
+            sb.append("------------------------------------------\n");
+            sb.append("COSTO TOTAL: $").append(costo).append("\n");
+            resultado.setText(sb.toString());
         } catch (Exception e) {
             MainFrame.mostrarError(e);
         }
@@ -87,9 +116,11 @@ public class ConsultasPanel extends JPanel implements RefreshablePanel {
             Dueño dueno = (Dueño) duenoResumenCombo.getSelectedItem();
             Map<Mascota, Integer> resumen = controller.resumenTratamientosPorMascota(dueno);
             StringBuilder builder = new StringBuilder();
-            builder.append("Resumen de tratamientos por mascota\n");
+            builder.append("=== RESUMEN DE TRATAMIENTOS POR MASCOTA ===\n");
+            builder.append("Dueno: ").append(dueno.getNombreCompleto()).append("\n\n");
             for (Map.Entry<Mascota, Integer> entry : resumen.entrySet()) {
-                builder.append(entry.getKey().getNombre()).append(": ").append(entry.getValue()).append("\n");
+                builder.append(" - ").append(entry.getKey().getNombre()).append(": ")
+                       .append(entry.getValue()).append(" tratamiento(s)\n");
             }
             resultado.setText(builder.toString());
         } catch (Exception e) {
